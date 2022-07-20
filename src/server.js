@@ -36,18 +36,18 @@ const days = require("./routes/days");
 
 // // Mount all resource routes
  app.use("/api", days(db));
-// // Note: Feel free to replace the example routes below with your own
+// //Note: Feel free to replace the example routes below with your own
 // app.use("/api/users", usersRoutes(db));
 // app.use("/api/widgets", widgetsRoutes(db));
 // // Note: mount other resources here, using the same pattern above
 
-// // Home page
-// // Warning: avoid creating more routes in this file!
-// // Separate them into separate routes files (see above).
+// Home page
+// Warning: avoid creating more routes in this file!
+// Separate them into separate routes files (see above).
 
 // app.get("/", (req, res) => {
-  //   res.render("index");
-  // });
+//   res.render("index");
+// });
 
 //   function read(file) {
 //     return new Promise((resolve, reject) => {
@@ -67,9 +67,9 @@ const days = require("./routes/days");
 
 // module.exports = function application(ENV) {
 
-//   // app.use(cors());
-//   // app.use(helmet());
-//   // app.use(bodyparser.json());
+//    app.use(cors());
+//    app.use(helmet());
+//    app.use(bodyparser.json());
 
 //   app.use("/api", days(db));
 
