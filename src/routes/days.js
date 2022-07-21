@@ -3,6 +3,7 @@ const router = require("express").Router();
 module.exports = db => {
   router.get("/days", (request, response) => {
     console.log("days get request");
+    console.log("db", db);
 
     db.query(
 
@@ -10,14 +11,14 @@ module.exports = db => {
 
     )
       .then((res) => {
-      console.log("res", res);
-      console.log('promise reponse from server');
-      response.json(days);
+        console.log("res =====>", res);
+        console.log('promise reponse from server');
+        response.json(res.rows);
     })
       .catch((err) => {
-        console.log('queryError');
-      console.log(err.message);
-    })
+        console.log('Query Error.....');
+        //console.log(err.message);
+      })
   });
 
   return router;

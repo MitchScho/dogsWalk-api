@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 // Web server config
-const PORT = process.env.DB_PORT || 8080;
+const PORT = process.env.SERVER_PORT || 8080;
 const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
@@ -13,7 +13,7 @@ const app = express();
 // const path = require("path");
 // const bodyparser = require("body-parser");
 // const helmet = require("helmet");
-// const cors = require("cors");
+ const cors = require("cors");
 
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
@@ -21,7 +21,9 @@ const app = express();
 //         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
-//app.use(express.static("public"));
+app.use(cors());
+  //app.use(express.static("public"));
+
 
 
 
