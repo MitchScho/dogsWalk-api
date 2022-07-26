@@ -31,13 +31,13 @@ app.use(cors());
 
 
 // Separated Routes for each Resource
-const days = require("./routes/days");
+const walks = require("./routes/walks");
 // // Note: Feel free to replace the example routes below with your own
 // const usersRoutes = require("./routes/users");
 // const widgetsRoutes = require("./routes/widgets");
 
 // // Mount all resource routes
- app.use("/api", days(db));
+ app.use("/api", walks(db));
 // //Note: Feel free to replace the example routes below with your own
 // app.use("/api/users", usersRoutes(db));
 // app.use("/api/widgets", widgetsRoutes(db));
