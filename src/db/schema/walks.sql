@@ -1,4 +1,4 @@
 
-INSERT INTO walks (user_id, availible_spots, payed_for) VALUES (1, 10, false);
-INSERT INTO walks (user_id, availible_spots, payed_for) VALUES (1, 10, false);
-INSERT INTO walks (user_id, availible_spots, payed_for) VALUES (2, 10, false);
+INSERT INTO walks (user_id, payed_for, availible_spots) VALUES (1, false, 12);
+INSERT INTO walks (user_id, payed_for, availible_spots) VALUES (1, false, 12);
+INSERT INTO walks (user_id, payed_for, availible_spots) VALUES (2, false, 12);
