@@ -11,7 +11,7 @@ const app = express();
 
 // const fs = require("fs");
 // const path = require("path");
-// const bodyparser = require("body-parser");
+const bodyParser = require("body-parser");
 // const helmet = require("helmet");
  const cors = require("cors");
 
@@ -22,84 +22,25 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(bodyParser.json())
   //app.use(express.static("public"));
 
 
 
 
-
-
-
 // Separated Routes for each Resource
-const walks = require("./routes/walks");
-// // Note: Feel free to replace the example routes below with your own
-// const usersRoutes = require("./routes/users");
-// const widgetsRoutes = require("./routes/widgets");
+const walksRoutes = require("./routes/walks");
+const usersRoutes = require("./routes/users");
+const dogsRoutes = require("./routes/dogs");
+
+
+
 
 // // Mount all resource routes
- app.use("/api", walks(db));
-// //Note: Feel free to replace the example routes below with your own
-// app.use("/api/users", usersRoutes(db));
-// app.use("/api/widgets", widgetsRoutes(db));
-// // Note: mount other resources here, using the same pattern above
+app.use("/api", walksRoutes(db));
+app.use("/api", usersRoutes(db));
+app.use("/api", dogsRoutes(db));
 
-// Home page
-// Warning: avoid creating more routes in this file!
-// Separate them into separate routes files (see above).
-
-// app.get("/", (req, res) => {
-//   res.render("index");
-// });
-
-//   function read(file) {
-//     return new Promise((resolve, reject) => {
-//       fs.readFile(
-//         file,
-//         {
-//           encoding: "utf-8"
-//         },
-//         (error, data) => {
-//           if (error) return reject(error);
-//           resolve(data);
-//         }
-//       );
-//     });
-//   }
-
-
-// module.exports = function application(ENV) {
-
-//    app.use(cors());
-//    app.use(helmet());
-//    app.use(bodyparser.json());
-
-//   app.use("/api", days(db));
-
-//     Promise.all([
-//       read(path.resolve(__dirname, `db/schema/create.sql`)),
-//       read(path.resolve(__dirname, `db/schema/${ENV}.sql`))
-//     ])
-//       .then(([create, seed]) => {
-//         app.get("/api/debug/reset", (request, response) => {
-//           db.query(create)
-//             .then(() => db.query(seed))
-//             .then(() => {
-//               console.log("Database Reset");
-//               response.status(200).send("Database Reset");
-//             });
-//         });
-//       })
-//       .catch(error => {
-//         console.log(`Error setting up the reset route: ${error}`);
-//       });
-
-
-//   app.close = function () {
-//     return db.end();
-//   };
-
-//   return app;
-// };
 
 
 
