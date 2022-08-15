@@ -2,8 +2,6 @@ const router = require("express").Router();
 
 module.exports = db => {
   router.get("/walks", (req, res) => {
-    console.log("walks get request");
-    console.log("db", db);
 
     db.query(
 
@@ -11,15 +9,9 @@ module.exports = db => {
 
     )
       .then((data) => {
-        // console.log("data =====>", data.rows);
-        // console.log('promise reponse from server');
-        res.json(data.rows);
-        // res.json(
-        //   walks.reduce(
-        //     (previous, current) => ({ ...previous, [current.id]: current }),
-        //     {}
-        //   )
-        // );
+
+        const walks = data.rows;
+        res.json(walks);
       })
       .catch((err) => {
         console.log('Query Error.....');
@@ -28,21 +20,19 @@ module.exports = db => {
   });
 
   router.post("/walks", (req, res) => {
+
     const date = req.body.date;
     const dogs = req.body.selectedDogs;
 
-
-
-
     db.query(`INSERT INTO walks(date) VALUES ('${date}') RETURNING id;`)
       .then((data) => {
-        console.log("insert response", data.rows[0].id);
+
         const walk_id = data.rows[0].id;
         const inserts = dogs.map((dog) =>
           db.query(`INSERT INTO walks_dogs (walk_id, dog_id) VALUES (${walk_id}, ${dog.id});`)
         )
         Promise.all(inserts)
-          .then(data =>
+          .then(() =>
             db.query(`
             SELECT walks.id AS walk_id, date, availible_spots, dogs.id AS dog_id, dogs.name, dogs.avatar
             FROM walks
@@ -52,21 +42,21 @@ module.exports = db => {
             ON dogs.id = walks_dogs.dog_id
             WHERE walks.id = ${walk_id} `))
           .then(data => {
+
             const walk = data.rows.reduce((walk, row) => {
 
-              console.log("walk", walk);
-              console.log("row", row);
               const dog = {
                 id: row.dog_id,
                 name: row.name,
                 avatar: row.avatar
               }
-              console.log("dog", dog);
+
               if (walk.dogs) {
                 walk.dogs.push(dog)
               } else {
                 walk.dogs = [dog]
               }
+
               return {
                 id: row.walk_id,
                 date: row.date,
@@ -77,8 +67,6 @@ module.exports = db => {
             res.json(walk);
           })
       })
-    // console.log("res", res);
-    // res.json();
   })
 
   return router;

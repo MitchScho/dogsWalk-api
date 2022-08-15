@@ -8,8 +8,8 @@ module.exports = (db) => {
 
     db.query(`SELECT * FROM dogs;`)
       .then((data) => {
-        // const dogs = data.rows;
-        res.json(data.rows);
+        const dogs = data.rows;
+        res.json(dogs);
         // res.json(
         //   dogs.reduce(
         //     (previous, current) => ({ ...previous, [current.id]: current }),
