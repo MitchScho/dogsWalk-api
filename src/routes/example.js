@@ -10,12 +10,12 @@
 
 // module.exports = (db) => {
 //   router.get("/", (req, res) => {
-//     let query = `SELECT * FROM widgets`;
+//     let query = `SELECT * FROM example`;
 //     console.log(query);
 //     db.query(query)
 //       .then(data => {
-//         const widgets = data.rows;
-//         res.json({ widgets });
+//         const example = data.rows;
+//         res.json({ example });
 //       })
 //       .catch(err => {
 //         res
