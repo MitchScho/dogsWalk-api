@@ -19,11 +19,15 @@ const bodyParser = require("body-parser");
 //Test Sequelize connection
 db.authenticate()
   .then(() => {
-    console.log('Database connection has been established successfully.');
+    console.log('Database connection established successfully with Sequelize.');
   })
   .catch((err) => {
     console.log(err.message);
   })
+
+  //Sync Models
+  db.sync({ force: true });
+  console.log("All models were synchronized successfully.");
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.

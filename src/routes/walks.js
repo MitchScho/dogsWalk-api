@@ -1,19 +1,26 @@
 const router = require("express").Router();
+const Walk = require('../models/Walk');
 
-module.exports = db => {
+module.exports = (db) => {
   router.get("/walks", (req, res) => {
 
-    db.query(
+    Walk.findAll()
+    // db.query(
 
-      `SELECT * FROM walks;`
+    //   `SELECT * FROM walks;`
 
-    )
-      .then((data) => {
+    // )
+      .then((walks) => {
+        console.log('walks db response', walks);
+        // res.sendStatus(200)
 
-        const walks = data.rows;
+        // const walks = data.rows;
         res.json(walks);
       })
       .catch((err) => {
+        res
+          .status(500)
+          .json({ error: err.message });
         console.log('Query Error.....');
         //console.log(err.message);
       })

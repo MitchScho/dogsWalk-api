@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const db = require('../db');
 
 
 const Dog = db.define('dog', {

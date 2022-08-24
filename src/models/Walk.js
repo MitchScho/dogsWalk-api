@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-
+const db = require('../db');
 
 const Walk = db.define('walk', {
   date: {
