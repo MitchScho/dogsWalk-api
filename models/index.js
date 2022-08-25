@@ -7,7 +7,7 @@ const Sequelize = require('sequelize');
 // const env = process.env.NODE_ENV || 'development';
 // const config = require(__dirname + '/../config/config.json')[env];
 // const db = {};
-const db = require('..');
+const db = require('../db');
 
 // let sequelize;
 // if (config.use_env_variable) {
@@ -22,6 +22,7 @@ const dogsModel = require('./Dog');
 const models = {
   walk: db.walksModel,
   dog: db.dogsModel,
+
 }
 // fs
 //   .readdirSync(__dirname)
@@ -32,14 +33,14 @@ const models = {
   //   const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
   //   db[model.name] = model;
   // });
+// console.log("model in model index", models);
+// Object.keys(models).forEach(modelName => {
+//   if ('associate' in models[modelName]) {
+//     models[modelName].associate(models);
+//   }
+// });
 
-Object.keys(models).forEach(modelName => {
-  if ('associate' in models[modelName]) {
-    models[modelName].associate(models);
-  }
-});
-
-models.sequelize = sequelize;
-models.Sequelize = Sequelize;
+models.sequelize = db;
+// models.Sequelize = Sequelize;
 
 module.exports = models;

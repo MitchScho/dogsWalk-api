@@ -1,6 +1,6 @@
 
 const router = require("express").Router();
-const Dog = require('../db/models/Dog')
+const Dog = require('../models/Dog')
 
 module.exports = (db) => {
   router.get("/dogs", (req, res) => {
@@ -32,6 +32,19 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
+
+
+  router.get("/test", (req, res) => {
+    console.log("Hi Test");
+    Dog.findAll()
+      .then((dogs) => {
+        console.log(dogs)
+        res.json({message: "Hi i'm a Test"})
+    })
+})
+
+
+
   return router;
 };
 
