@@ -1,6 +1,6 @@
 
 const router = require("express").Router();
-const Dog = require('../models/Dog')
+const Dog = require('../db/models/Dog')
 
 module.exports = (db) => {
   router.get("/dogs", (req, res) => {

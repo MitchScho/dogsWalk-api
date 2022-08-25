@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
-const db = require('../db');
+const db = require('..');
 
 
-const Dog = db.define('dog', {
+const Dog = db.define('dogs', {
   name: {
     type: Sequelize.STRING
   },
@@ -10,5 +10,9 @@ const Dog = db.define('dog', {
     type: Sequelize.STRING
   },
 })
+
+Dog.associate = (models) => {
+
+}
 
 module.exports = Dog;

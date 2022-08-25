@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const db = require('../db');
+const db = require('..');
 
-const Walk = db.define('walk', {
+const Walk = db.define('walks', {
   date: {
     type: Sequelize.DATE
   },
@@ -9,5 +9,9 @@ const Walk = db.define('walk', {
     type: Sequelize.BOOLEAN
   },
 })
+
+Walk.associate = (models) => {
+
+}
 
 module.exports = Walk;
