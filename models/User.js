@@ -18,4 +18,4 @@ User.associate = (models) => {
 
 };
 
-module.exports = Dog;
+module.exports = User;
