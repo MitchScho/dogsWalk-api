@@ -15,11 +15,11 @@ const models = {
 
 }
 
-// Object.keys(models).forEach(modelName => {
-//   if ('associate' in models[modelName]) {
-//     models[modelName].associate(models);
-//   }
-// });
+Object.keys(models).forEach(modelName => {
+  if ('associate' in models[modelName]) {
+    models[modelName].associate(models);
+  }
+});
 
 models.sequelize = db;
 // models.Sequelize = Sequelize;

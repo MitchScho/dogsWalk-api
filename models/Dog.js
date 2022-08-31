@@ -14,11 +14,11 @@ const Dog = db.define('dogs', {
 Dog.associate = (models) => {
   Dog.belongsToMany(models.Walk, {
     through: 'walks_dogs',
-    foreignKey: 'walk_id',
+    foreignKey: 'dog_id',
   });
-  Dog.belongsTo(models.User, {
-    foreignKey: 'owner_id'
-  })
+  // Dog.belongsTo(models.User, {
+  //   foreignKey: 'owner_id'
+  // })
 };
 
 module.exports = Dog;

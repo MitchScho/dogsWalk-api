@@ -12,7 +12,7 @@ module.exports = (db) => {
     // db.query(`SELECT * FROM dogs;`)
 
       .then((dogs) => {
-        console.log("dogs from db response", dogs);
+        // console.log("dogs from db response", dogs);
         // const dogs = data.rows;
         res.json(dogs);
         // res.send(dogs);

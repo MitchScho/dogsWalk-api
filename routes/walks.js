@@ -1,15 +1,16 @@
 const router = require("express").Router();
+const res = require("express/lib/response");
 const Walk = require('../models/Walk');
 
 module.exports = (db) => {
   router.get("/walks", (req, res) => {
 
     Walk.findAll()
-    // db.query(
+      // db.query(
 
-    //   `SELECT * FROM walks;`
+      //   `SELECT * FROM walks;`
 
-    // )
+      // )
       .then((walks) => {
         console.log('walks db response', walks);
         // res.sendStatus(200)
@@ -26,55 +27,70 @@ module.exports = (db) => {
       })
   });
 
-  router.post("/walks", (req, res) => {
 
+  router.post("/walks", (req, res) => {
     const date = req.body.date;
     const dogs = req.body.selectedDogs;
-
-    db.query(`INSERT INTO walks(date) VALUES ('${date}') RETURNING id;`)
-      .then((data) => {
-
-        const walk_id = data.rows[0].id;
-        const inserts = dogs.map((dog) =>
-          db.query(`INSERT INTO walks_dogs (walk_id, dog_id) VALUES (${walk_id}, ${dog.id});`)
-        )
-        Promise.all(inserts)
-          .then(() =>
-            db.query(`
-            SELECT walks.id AS walk_id, date, availible_spots, dogs.id AS dog_id, dogs.name, dogs.avatar
-            FROM walks
-            INNER JOIN walks_dogs
-            ON walks.id = walks_dogs.walk_id
-            INNER JOIN dogs
-            ON dogs.id = walks_dogs.dog_id
-            WHERE walks.id = ${walk_id} `))
-          .then(data => {
-
-            const walk = data.rows.reduce((walk, row) => {
-
-              const dog = {
-                id: row.dog_id,
-                name: row.name,
-                avatar: row.avatar
-              }
-
-              if (walk.dogs) {
-                walk.dogs.push(dog)
-              } else {
-                walk.dogs = [dog]
-              }
-
-              return {
-                id: row.walk_id,
-                date: row.date,
-                availible_spots: row.availible_spots,
-                dogs: walk.dogs
-              }
-            }, {})
-            res.json(walk);
-          })
+    console.log("date for post request", date);
+    Walk.create({ date: date })
+      .then((walk) => {
+        const walk_id = walk.dataValues.id
+        res.json(walk)
+        console.log("walk create data", walk.dataValues);
       })
+  
   })
+
+
+  // router.post("/walks", (req, res) => {
+
+  //   const date = req.body.date;
+  //   const dogs = req.body.selectedDogs;
+
+  //   db.query(`INSERT INTO walks(date) VALUES ('${date}') RETURNING id;`)
+  //     .then((data) => {
+
+  //       const walk_id = data.rows[0].id;
+  //       const inserts = dogs.map((dog) =>
+  //         db.query(`INSERT INTO walks_dogs (walk_id, dog_id) VALUES (${walk_id}, ${dog.id});`)
+  //       )
+  //       Promise.all(inserts)
+  //         .then(() =>
+  //           db.query(`
+  //           SELECT walks.id AS walk_id, date, availible_spots, dogs.id AS dog_id, dogs.name, dogs.avatar
+  //           FROM walks
+  //           INNER JOIN walks_dogs
+  //           ON walks.id = walks_dogs.walk_id
+  //           INNER JOIN dogs
+  //           ON dogs.id = walks_dogs.dog_id
+  //           WHERE walks.id = ${walk_id} `))
+  //         .then(data => {
+
+  //           const walk = data.rows.reduce((walk, row) => {
+
+  //             const dog = {
+  //               id: row.dog_id,
+  //               name: row.name,
+  //               avatar: row.avatar
+  //             }
+
+  //             if (walk.dogs) {
+  //               walk.dogs.push(dog)
+  //             } else {
+  //               walk.dogs = [dog]
+  //             }
+
+  //             return {
+  //               id: row.walk_id,
+  //               date: row.date,
+  //               availible_spots: row.availible_spots,
+  //               dogs: walk.dogs
+  //             }
+  //           }, {})
+  //           res.json(walk);
+  //         })
+  //     })
+  // })
 
   return router;
 };
