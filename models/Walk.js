@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const {Sequelize, DataTypes, Model} = require('sequelize');
 const db = require('../db');
 
 const Walk = db.define('walks', {

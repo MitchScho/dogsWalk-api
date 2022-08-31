@@ -31,14 +31,23 @@ module.exports = (db) => {
   router.post("/walks", (req, res) => {
     const date = req.body.date;
     const dogs = req.body.selectedDogs;
+    console.log("dogs for insert", dogs)
     console.log("date for post request", date);
-    Walk.create({ date: date })
+    Walk.create({
+      date: date,
+      dogs: dogs
+    }, {
+      include: [{
+        association: walks_dogs,
+        as: 'walks_dogs'
+      }]
+    })
       .then((walk) => {
-        const walk_id = walk.dataValues.id
+        // const walk_id = walk.dataValues.id
         res.json(walk)
         console.log("walk create data", walk.dataValues);
       })
-  
+
   })
 
 

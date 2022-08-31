@@ -3,6 +3,8 @@
 // const Sequelize = require('sequelize');
 const db = require('../db');
 
+console.log("db required", db);
+
 
 const usersModel = require('./User');
 const walksModel = require('./Walk');
@@ -14,6 +16,7 @@ const models = {
   user:db.userModel,
 
 }
+console.log("models", models);
 
 Object.keys(models).forEach(modelName => {
   if ('associate' in models[modelName]) {
@@ -23,5 +26,8 @@ Object.keys(models).forEach(modelName => {
 
 models.sequelize = db;
 // models.Sequelize = Sequelize;
+console.log("model.sequelize db", db);
+
+
 
 module.exports = models;
