@@ -33,15 +33,16 @@ module.exports = (db) => {
     const dogs = req.body.selectedDogs;
     console.log("dogs for insert", dogs)
     console.log("date for post request", date);
-    Walk.create({
-      date: date,
-      dogs: dogs
-    }, {
-      include: [{
-        association: walks_dogs,
-        as: 'walks_dogs'
-      }]
-    })
+    Walk.create({date: date})
+    // Walk.create({
+    //   date: date,
+    //   dogs: dogs
+    // }, {
+    //   include: [{
+    //     association: walks_dogs,
+    //     as: 'walks_dogs'
+    //   }]
+    // })
       .then((walk) => {
         // const walk_id = walk.dataValues.id
         res.json(walk)

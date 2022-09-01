@@ -1,40 +1,84 @@
 // 'use strict';
 
-// // const Sequelize = require('sequelize');
-const db = require('../db');
+//MORE COMPLICATED VERSION
 
+// // const Sequelize = require('sequelize');
+
+// New Sequelize Instance- Database Connection
+const Sequelize = require('sequelize');
+const sequelize = require('../db');
+const Dog = require('./Dog');
+const Walk = require('./Walk');
+console.log("sequelize in models index", sequelize);
 console.log("Model Index");
 
+//-----------------------------------------------------------------------------
+//Associations using basic associations
 
+Walk.belongsToMany(Dog, { through: 'walks_dogs', foreignKey: 'walk_id' });
+
+//------------------------------------------------------------------------------
+// Basic association syntax
+Dog.belongsToMany(Walk, { through: 'walks_dogs', foreignKey: 'dog_id' });
+
+
+
+//---------------------------------------------------------------------------
+// // Require Model files for new db object
 // const usersModel = require('./User');
 // const walksModel = require('./Walk');
 // const dogsModel = require('./Dog');
-// const User = require('./User');
-const Walk = require('./Walk');
-const Dog = require('./Dog');
+// const walksdogsModel = require('./WalkDog');
 
-// const models = {
-//   walk: db.walksModel,
-//   dog: db.dogsModel,
-//   user:db.userModel,
-Dog.belongsToMany(Walk, { through: 'walks_dogs', foreignKey: 'dog_id' });
+// console.log("sequelize-----", sequelize);
+// console.log("dogs model-----", sequelize.dogsModel);
 
-Walk.belongsToMany(Dog, { through: 'walks_dogs', foreignKey: 'walk_id' });
+// const db = {
+//   Walk: sequelize.walksModel,
+//   Dog: sequelize.dogsModel,
+//   User:sequelize.usersModel,
+//   WalkDog: sequelize.walksdogsModel,
 // }
-// console.log("models", models);
 
-// Object.keys(models).forEach(modelName => {
-//   if ('associate' in models[modelName]) {
-//     models[modelName].associate(models);
+
+//----------------------------------------------------------------------------
+// Require Model files for new db object
+
+// console.log("sequelize-----", sequelize);
+
+
+// const db = {
+//   Walk: require('./Walk')(sequelize, Sequelize),
+//   Dog: require('./Dog')(sequelize, Sequelize),
+//   User: require('./User')(sequelize, Sequelize),
+//   WalkDog: require('./WalkDog')(sequelize, Sequelize),
+// }
+
+//--------------------------------------------------------------------------------
+// console.log("models db", db);
+
+// Object.keys(db).forEach(modelName => {
+//   if ('associate' in db[modelName]) {
+//     db[modelName].associate(db);
 //   }
 // });
 
-// models.sequelize = db;
+// db.sequelize = sequelize;
 // // models.Sequelize = Sequelize;
-// console.log("model.sequelize db", db);
+// console.log("model.sequelize db", sequelize);
 
-//Sync Models
-  // db.sync({alter: true})
-  //   console.log("All models were synchronized successfully.");
 
-// module.exports = models;
+
+//----------------------------------------------------------------------------------
+
+//SIMPLER VERSION
+
+
+// const Walk = require('./Walk');
+// const Dog = require('./Dog');
+
+// Dog.belongsToMany(Walk, { through: 'walks_dogs', foreignKey: 'dog_id' });
+
+// Walk.belongsToMany(Dog, { through: 'walks_dogs', foreignKey: 'walk_id' });
+
+module.exports = db;

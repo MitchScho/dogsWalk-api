@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
+//--------------------------------------------------------------------------------------------------
 
+//Define Model
 
 const User = db.define('users', {
   name: {
@@ -13,6 +15,9 @@ const User = db.define('users', {
     type: Sequelize.STRING
   },
 })
+
+//------------------------------------------------------------------------------------------------------
+//Associations
 
 User.associate = (models) => {
 

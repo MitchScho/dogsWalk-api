@@ -7,7 +7,7 @@ const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
 const app = express();
-// const models = require('../db/models')
+// const models = require('./models')
 
 
 // const fs = require("fs");
@@ -26,7 +26,7 @@ db.authenticate()
     console.log(err.message);
   })
 
-  
+
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
 // 'dev' = Concise output colored by response status for development use.
@@ -62,8 +62,13 @@ app.get('*', (req, res) => {
 
 
 
+//Sync Models
+db.sync()
+  .then(() => {
+    console.log("All models were synchronized successfully.");
 
+  })
 
-app.listen(PORT, () => {
-  console.log(`dogsWalk-api app listening on port ${PORT}`);
-});
+  app.listen(PORT, () => {
+    console.log(`dogsWalk-api app listening on port ${PORT}`);
+  });
