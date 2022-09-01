@@ -63,11 +63,11 @@ app.get('*', (req, res) => {
 
 
 //Sync Models
-// db.sync()
-//   .then(() => {
-//     console.log("All models were synchronized successfully.");
+db.sync()
+  .then(() => {
+    console.log("All models were synchronized successfully.");
 
-//   })
+  })
 
   app.listen(PORT, () => {
     console.log(`dogsWalk-api app listening on port ${PORT}`);
