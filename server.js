@@ -7,7 +7,7 @@ const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
 const app = express();
-// const models = require('./models')
+// const models = require('./db/models')
 
 
 // const fs = require("fs");

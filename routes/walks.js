@@ -1,6 +1,6 @@
 const router = require("express").Router();
 // const res = require("express/lib/response");
-const Walk = require('../models/Walk');
+const Walk = require('../db/models/Walk');
 
 module.exports = (db) => {
   router.get("/walks", (req, res) => {
