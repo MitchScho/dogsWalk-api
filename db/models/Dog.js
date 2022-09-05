@@ -17,6 +17,7 @@ const Dog = db.define('dogs', {
 
 //------------------------------------------------------------------------------
 // Basic association syntax
+
 // Dog.belongsToMany(Walk, { through: 'walks_dogs', foreignKey: 'dog_id' });
 
 //-----------------------------------------------------------------------------------

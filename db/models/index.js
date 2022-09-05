@@ -5,21 +5,21 @@
 // // const Sequelize = require('sequelize');
 
 // New Sequelize Instance- Database Connection
-const Sequelize = require('sequelize');
-const sequelize = require('../db');
-const Dog = require('./Dog');
-const Walk = require('./Walk');
-console.log("sequelize in models index", sequelize);
-console.log("Model Index");
+// const Sequelize = require('sequelize');
+// const sequelize = require('..');
+// const Dog = require('./Dog');
+// const Walk = require('./Walk');
+// console.log("sequelize in models index", sequelize);
+// console.log("Model Index");
 
 //-----------------------------------------------------------------------------
 //Associations using basic associations
 
-Walk.belongsToMany(Dog, { through: 'walks_dogs', foreignKey: 'walk_id' });
+// Walk.belongsToMany(Dog, { through: 'walks_dogs', foreignKey: 'walk_id' });
 
 //------------------------------------------------------------------------------
 // Basic association syntax
-Dog.belongsToMany(Walk, { through: 'walks_dogs', foreignKey: 'dog_id' });
+// Dog.belongsToMany(Walk, { through: 'walks_dogs', foreignKey: 'dog_id' });
 
 
 
@@ -81,4 +81,4 @@ Dog.belongsToMany(Walk, { through: 'walks_dogs', foreignKey: 'dog_id' });
 
 // Walk.belongsToMany(Dog, { through: 'walks_dogs', foreignKey: 'walk_id' });
 
-module.exports = db;
+// module.exports = db;

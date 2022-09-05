@@ -66,7 +66,6 @@ app.get('*', (req, res) => {
 db.sync()
   .then(() => {
     console.log("All models were synchronized successfully.");
-
   })
 
   app.listen(PORT, () => {
