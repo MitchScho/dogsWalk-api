@@ -19,8 +19,8 @@ const User = db.define('users', {
 //------------------------------------------------------------------------------------------------------
 //Associations
 
-User.associate = (models) => {
+// User.associate = (models) => {
 
-};
+// };
 
 module.exports = User;

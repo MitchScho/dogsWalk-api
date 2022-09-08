@@ -1,6 +1,8 @@
 const router = require("express").Router();
 // const res = require("express/lib/response");
 const Walk = require('../db/models/Walk');
+const Dog = require('../db/models/Dog');
+const WalkDog = require('../db/models/WalkDog');
 
 module.exports = (db) => {
   router.get("/walks", (req, res) => {
@@ -33,20 +35,28 @@ module.exports = (db) => {
     const dogs = req.body.selectedDogs;
     console.log("dogs for insert", dogs)
     console.log("date for post request", date);
-    Walk.create({date: date})
-    // Walk.create({
-    //   date: date,
-    //   dogs: dogs
-    // }, {
-    //   include: [{
-    //     association: walks_dogs,
-    //     as: 'walks_dogs'
-    //   }]
-    // })
+    Walk.create({ date: date })
+
       .then((walk) => {
+        // console.log("response walk", walk);
+        // console.log("walk Id ", walk.dataValues.id);
+        // const inserts = dogs.map((dog) =>
+        //   WalkDog.create({
+        //     walkId: walk.dataValues.id,
+        //     dogId: dog.id
+        //   },
+        //     // {
+        //     // include: [Dog]
+        //     // }
+        //   )
+        // )
+        // Promise.all(inserts)
+        //   .then((data) => {
+        //     console.log("data", data);
+        // })
+
         // const walk_id = walk.dataValues.id
         res.json(walk)
-        console.log("walk create data", walk.dataValues);
       })
 
   })

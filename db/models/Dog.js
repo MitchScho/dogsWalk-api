@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 const db = require('..');
-// const Walk = require('./Walk');
+const Walk = require('./Walk');
 
 //---------------------------------------------------------------------------
 //Define Model
@@ -17,7 +17,7 @@ const Dog = db.define('dogs', {
 
 //------------------------------------------------------------------------------
 // Basic association syntax
-// Dog.belongsToMany(Walk, { through: 'walks_dogs', foreignKey: 'dog_id' });
+// Dog.belongsToMany(Walk, { through: 'walks_dogs'});
 
 //-----------------------------------------------------------------------------------
 

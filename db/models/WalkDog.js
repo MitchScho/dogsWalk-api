@@ -5,10 +5,10 @@ const db = require('..');
 //Model defined
 
 const WalkDog = db.define('walks_dogs', {
-  walk_id: {
+  walkId: {
     type: DataTypes.INTEGER,
   },
-  dog_id: {
+  dogId: {
     type: DataTypes.INTEGER,
   }
 
