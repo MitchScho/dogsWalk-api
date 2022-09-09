@@ -1,23 +1,18 @@
 const router = require("express").Router();
-// const res = require("express/lib/response");
+//-----------------------------------------------------------------------------------------
+//----- Models ------
 const Walk = require('../db/models/Walk');
 const Dog = require('../db/models/Dog');
 const WalkDog = require('../db/models/WalkDog');
 
+//-------------------------------------------------------------------------------------------
+
 module.exports = (db) => {
   router.get("/walks", (req, res) => {
 
-    Walk.findAll()
-      // db.query(
-
-      //   `SELECT * FROM walks;`
-
-      // )
+    Walk.findAll({ include: Dog })
       .then((walks) => {
-        console.log('walks db response', walks);
-        // res.sendStatus(200)
-
-        // const walks = data.rows;
+        console.log('All walks include dogs db response', walks);
         res.json(walks);
       })
       .catch((err) => {
@@ -25,7 +20,6 @@ module.exports = (db) => {
           .status(500)
           .json({ error: err.message });
         console.log('Query Error.....');
-        //console.log(err.message);
       })
   });
 
@@ -38,27 +32,26 @@ module.exports = (db) => {
     Walk.create({ date: date })
 
       .then((walk) => {
-        // console.log("response walk", walk);
-        // console.log("walk Id ", walk.dataValues.id);
-        // const inserts = dogs.map((dog) =>
-        //   WalkDog.create({
-        //     walkId: walk.dataValues.id,
-        //     dogId: dog.id
-        //   },
-        //     // {
-        //     // include: [Dog]
-        //     // }
-        //   )
-        // )
-        // Promise.all(inserts)
-        //   .then((data) => {
-        //     console.log("data", data);
-        // })
-
-        // const walk_id = walk.dataValues.id
-        res.json(walk)
+        console.log("response walk", walk);
+        console.log("walk Id ", walk.dataValues.id);
+        const inserts = dogs.map((dog) =>
+          WalkDog.create({
+            walkId: walk.dataValues.id,
+            dogId: dog.id
+          },
+          )
+        )
+        Promise.all(inserts)
+          .then((data) => {
+            console.log("data", data);
+            Walk.findByPk(walk.dataValues.id, { include: Dog })
+              .then((createdWalk) => {
+                res.json(createdWalk);
+              })
+          })
       })
 
+    
   })
 
 

@@ -4,6 +4,7 @@ const db = require('..');
 // const walks = require('../routes/walks');
 const Dog = require('./Dog');
 const User = require('./User');
+const WalkDog = require('./WalkDog');
 //--------------------------------------------------------------------------------------------------
 //Define Model
 
@@ -23,7 +24,7 @@ const Walk = db.define('walks', {
 //-----------------------------------------------------------------------------
 //Associations using basic associations
 Walk.belongsTo(User);
-Walk.belongsToMany(Dog, { through: 'walks_dogs' });
+Walk.belongsToMany(Dog, { through: WalkDog });
 
 //-------------------------------------------------------------------------------------------------
 // Associations using asociate function
