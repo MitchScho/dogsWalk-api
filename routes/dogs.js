@@ -1,15 +1,24 @@
 
 const router = require("express").Router();
+const Dog = require('../db/models/Dog')
 
 module.exports = (db) => {
   router.get("/dogs", (req, res) => {
 
     console.log("dogs route hit");
 
-    db.query(`SELECT * FROM dogs;`)
-      .then((data) => {
-        const dogs = data.rows;
+    Dog.findAll()
+
+    // db.query(`SELECT * FROM dogs;`)
+
+      .then((dogs) => {
+        // console.log("dogs from db response", dogs);
+        // const dogs = data.rows;
         res.json(dogs);
+        // res.send(dogs);
+
+
+
         // res.json(
         //   dogs.reduce(
         //     (previous, current) => ({ ...previous, [current.id]: current }),
@@ -23,6 +32,19 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
+
+
+  router.get("/test", (req, res) => {
+    console.log("Hi Test");
+    Dog.findAll()
+      .then((dogs) => {
+        console.log(dogs)
+        res.json({message: "Hi i'm a Test"})
+    })
+})
+
+
+
   return router;
 };
 

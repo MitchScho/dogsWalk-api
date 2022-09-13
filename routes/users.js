@@ -1,11 +1,14 @@
+const User = require("../db/models/User");
+
 const router = require("express").Router();
 
 module.exports = (db) => {
   router.get("/users", (req, res) => {
-    db.query(`SELECT * FROM users;`)
-      .then(data => {
+    // db.query(`SELECT * FROM users;`)
+    User.findAll()
+      .then((users) => {
         // const users = data.rows;
-        res.json(data.rows);
+        res.json(users);
       })
       .catch(err => {
         res

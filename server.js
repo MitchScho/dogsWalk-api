@@ -7,13 +7,25 @@ const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
 const app = express();
+// const models = require('./db/models')
 
 
 // const fs = require("fs");
 // const path = require("path");
 const bodyParser = require("body-parser");
 // const helmet = require("helmet");
- const cors = require("cors");
+const cors = require("cors");
+
+
+//Test Sequelize connection
+db.authenticate()
+  .then(() => {
+    console.log('Database connection established successfully with Sequelize.');
+  })
+  .catch((err) => {
+    console.log(err.message);
+  })
+
 
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
@@ -23,7 +35,7 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(bodyParser.json())
-  //app.use(express.static("public"));
+//app.use(express.static("public"));
 
 
 
@@ -48,9 +60,15 @@ app.get('*', (req, res) => {
   res.redirect(404, "/");
 });
 
-app.listen(PORT, () => {
-  console.log(`dogsWalk-api app listening on port ${PORT}`);
-});
 
 
+//Sync Models
+db.sync()
+  .then(() => {
+    console.log("All models were synchronized successfully.");
 
+  })
+
+  app.listen(PORT, () => {
+    console.log(`dogsWalk-api app listening on port ${PORT}`);
+  });
