@@ -12,7 +12,7 @@ module.exports = (db) => {
 
     Walk.findAll({ include: Dog })
       .then((walks) => {
-        console.log('All walks include dogs db response', walks);
+        // console.log('All walks include dogs db response', walks);
         res.json(walks);
       })
       .catch((err) => {
@@ -27,13 +27,13 @@ module.exports = (db) => {
   router.post("/walks", (req, res) => {
     const date = req.body.date;
     const dogs = req.body.selectedDogs;
-    console.log("dogs for insert", dogs)
-    console.log("date for post request", date);
+    // console.log("dogs for insert", dogs)
+    // console.log("date for post request", date);
     Walk.create({ date: date })
 
       .then((walk) => {
-        console.log("response walk", walk);
-        console.log("walk Id ", walk.dataValues.id);
+        // console.log("response walk", walk);
+        // console.log("walk Id ", walk.dataValues.id);
         const inserts = dogs.map((dog) =>
           WalkDog.create({
             walkId: walk.dataValues.id,
@@ -43,7 +43,7 @@ module.exports = (db) => {
         )
         Promise.all(inserts)
           .then((data) => {
-            console.log("data", data);
+            // console.log("data", data);
             Walk.findByPk(walk.dataValues.id, { include: Dog })
               .then((createdWalk) => {
                 res.json(createdWalk);
@@ -51,7 +51,7 @@ module.exports = (db) => {
           })
       })
 
-    
+
   })
 
 
