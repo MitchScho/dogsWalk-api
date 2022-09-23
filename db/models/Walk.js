@@ -1,12 +1,10 @@
-const {Sequelize, DataTypes, Model} = require('sequelize');
-
+const { Sequelize } = require('sequelize');
 const db = require('..');
-// const walks = require('../routes/walks');
 const Dog = require('./Dog');
 const User = require('./User');
 const WalkDog = require('./WalkDog');
 //--------------------------------------------------------------------------------------------------
-//Define Model
+//------ Define Model ------------------------------------------------------------------------------
 
 const Walk = db.define('walks', {
   date: {
@@ -21,25 +19,11 @@ const Walk = db.define('walks', {
 });
 //-------------------------------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-//Associations using basic associations
+//------ Associations ------------------------------------------------------------------------------
 Walk.belongsTo(User);
 Walk.belongsToMany(Dog, { through: WalkDog });
 
 //-------------------------------------------------------------------------------------------------
-// Associations using asociate function
 
-// Walk.associate = (models) => {
-
-//   Walk.belongsToMany(models.Dog, {
-//     through: 'walks_dogs',
-//     foreignKey: 'walk_id',
-//   });
-
-  // Walk.belongsToMany(models.User, {
-  //   through: 'users_walks',
-  //   foreignKey: 'user_id',
-  // });
-// }
 
 module.exports = Walk;

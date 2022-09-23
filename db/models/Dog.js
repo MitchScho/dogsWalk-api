@@ -16,21 +16,6 @@ const Dog = db.define('dogs', {
 });
 
 //------------------------------------------------------------------------------
-// Basic association syntax
-// Dog.belongsToMany(Walk, { through: 'walks_dogs'});
 
-//-----------------------------------------------------------------------------------
-
-//Association function syntax
-
-// Dog.associate = (models) => {
-//   Dog.belongsToMany(models.Walk, {
-//     through: 'walks_dogs',
-//     foreignKey: 'dog_id',
-//   });
-  // Dog.belongsTo(models.User, {
-  //   foreignKey: 'owner_id'
-  // })
-// };
 
 module.exports = Dog;

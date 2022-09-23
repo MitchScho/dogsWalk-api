@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const db = require('..');
-// const Dog = require('./Dog');
+
 //--------------------------------------------------------------------------------------------------
 //Model defined
 
@@ -13,5 +13,6 @@ const WalkDog = db.define('walks_dogs', {
   }
 
 });
+//---------------------------------------------------------------------------------------------------
 
 module.exports = WalkDog;
