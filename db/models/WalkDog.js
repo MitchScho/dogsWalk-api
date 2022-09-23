@@ -1,8 +1,8 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const db = require('..');
 
 //--------------------------------------------------------------------------------------------------
-//Model defined
+//------ WalkDog Model Defined ----------------------------------------------------------------------------
 
 const WalkDog = db.define('walks_dogs', {
   walkId: {

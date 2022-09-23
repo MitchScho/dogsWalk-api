@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('..');
 //--------------------------------------------------------------------------------------------------
 
-//Define Model
+//------ User Model Defined ------------------------------------------------------------------------
 
 const User = db.define('users', {
   name: {
