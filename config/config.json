@@ -5,6 +5,7 @@
     "database": "dogswalk",
     "host": "localhost",
     "dialect": "postgres"
+
   },
   "test": {
     "username": "MutchMacBook",
@@ -12,6 +13,7 @@
     "database": "database_test",
     "host": "localhost",
     "dialect": "postgres"
+
   },
   "production": {
     "username": "MutchMacBook",
@@ -19,6 +21,7 @@
     "database": "dogswalk",
     "host": "localhost",
     "dialect": "postgres"
+
   }
 }
 
