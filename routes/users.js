@@ -1,4 +1,4 @@
-const User = require("../db/models/User");
+const User = require("../db/funcModels/User");
 
 const router = require("express").Router();
 
@@ -7,7 +7,7 @@ module.exports = (db) => {
 
     User.findAll()
       .then((users) => {
-        
+
         res.json(users);
       })
       .catch(err => {

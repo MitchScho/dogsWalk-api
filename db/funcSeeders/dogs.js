@@ -3,26 +3,23 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    await queryInterface.bulkInsert('walks', [{
-      userId: 1,
-      payedFor: false,
-      isAccepted: false,
+    await queryInterface.bulkInsert('dogs', [{
+      name: 'Lexi',
+      avatar: 'Lexi Avatar',
       createdAt: new Date(),
       updatedAt: new Date(),
 
     },
     {
-      userId: 2,
-      payedFor: false,
-      isAccepted: false;
+      name: 'Roxy',
+      avatar: 'Roxy Avatar',
       createdAt: new Date(),
       updatedAt: new Date(),
 
     },
     {
-      userId: 1,
-      payedFor: false,
-      isAccepted: false,
+      name: 'Eldon',
+      avatar: 'Eldon Avatar',
       createdAt: new Date(),
       updatedAt: new Date(),
 
@@ -32,7 +29,7 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
 
-    await queryInterface.bulkDelete('walks', null, {});
+    await queryInterface.bulkDelete('dogs', null, {});
 
   }
 };

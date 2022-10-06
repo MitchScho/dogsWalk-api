@@ -1,9 +1,9 @@
 const router = require("express").Router();
 //-----------------------------------------------------------------------------------------
 //----- Models ------
-const Walk = require('../db/models/Walk');
-const Dog = require('../db/models/Dog');
-const WalkDog = require('../db/models/WalkDog');
+const Walk = require('../db/funcModels/Walk');
+const Dog = require('../db/funcModels/Dog');
+const WalkDog = require('../db/funcModels/WalkDog');
 
 //-------------------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ module.exports = (db) => {
           }))
         Promise.all(inserts)
           .then((data) => {
-    
+
             Walk.findByPk(walk.dataValues.id, { include: Dog })
               .then((createdWalk) => {
                 res.json(createdWalk);

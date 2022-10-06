@@ -1,29 +1,28 @@
-const { Sequelize } = require('sequelize');
-const db = require('..');
-const Dog = require('./Dog');
-const User = require('./User');
-const WalkDog = require('./WalkDog');
-//--------------------------------------------------------------------------------------------------
-//------ Walk Model Defined ------------------------------------------------------------------------------
-
-const Walk = db.define('walks', {
-  date: {
-    type: Sequelize.DATE
-  },
-  userId: {
-    type: Sequelize.INTEGER
-  },
-  payed_for: {
-    type: Sequelize.BOOLEAN
-  },
-});
-//-------------------------------------------------------------------------------------------------
-
-//------ Associations ------------------------------------------------------------------------------
-Walk.belongsTo(User);
-Walk.belongsToMany(Dog, { through: WalkDog });
-
-//-------------------------------------------------------------------------------------------------
-
-
-module.exports = Walk;
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Walk extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      Walk.belongsTo(User);
+      Walk.belongsToMany(Dog, { through: WalkDog });
+    }
+  }
+  Walk.init({
+    date: DataTypes.DATE,
+    userId: DataTypes.INTEGER,
+    payedFor: DataTypes.BOOLEAN,
+    isAccepted: DataTypes.BOOLEAN
+  }, {
+    sequelize,
+    modelName: 'Walk',
+  });
+  return Walk;
+};

@@ -49,11 +49,11 @@ app.get('*', (req, res) => {
 
 
 //------ Sync Models ------------------------------------------------------------------------------------
-db.sync()
-  .then(() => {
-    console.log("All models were synchronized successfully.");
+// db.sync({force: true})
+//   .then(() => {
+//     console.log("All models were synchronized successfully.");
 
-  })
+//   })
 
 //-------------------------------------------------------------------------------------------------------
 app.listen(PORT, () => {

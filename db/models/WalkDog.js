@@ -1,18 +1,24 @@
-const { DataTypes } = require('sequelize');
-const db = require('..');
-
-//--------------------------------------------------------------------------------------------------
-//------ WalkDog Model Defined ----------------------------------------------------------------------------
-
-const WalkDog = db.define('walks_dogs', {
-  walkId: {
-    type: DataTypes.INTEGER,
-  },
-  dogId: {
-    type: DataTypes.INTEGER,
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class WalkDog extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+    }
   }
-
-});
-//---------------------------------------------------------------------------------------------------
-
-module.exports = WalkDog;
+  WalkDog.init({
+    walkId: DataTypes.INTEGER,
+    dogId: DataTypes.INTEGER
+  }, {
+    sequelize,
+    modelName: 'WalkDog',
+  });
+  return WalkDog;
+};

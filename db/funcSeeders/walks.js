@@ -5,24 +5,21 @@ module.exports = {
 
     await queryInterface.bulkInsert('walks', [{
       userId: 1,
-      payedFor: false,
-      isAccepted: false,
+      payed_for: false,
       createdAt: new Date(),
       updatedAt: new Date(),
 
     },
     {
       userId: 2,
-      payedFor: false,
-      isAccepted: false;
+      payed_for: false,
       createdAt: new Date(),
       updatedAt: new Date(),
 
     },
     {
       userId: 1,
-      payedFor: false,
-      isAccepted: false,
+      payed_for: false,
       createdAt: new Date(),
       updatedAt: new Date(),
 
