@@ -35,12 +35,16 @@ app.use(bodyParser.json())
 const walksRoutes = require("./routes/walks");
 const usersRoutes = require("./routes/users");
 const dogsRoutes = require("./routes/dogs");
+//-----------------------------------------------------
+const adminWalksRoutes = require("./routes/admin/walks");
 
 
 //------ Mount all resource routes -------------------------------------------------------------------
 app.use("/api", walksRoutes(db));
 app.use("/api", usersRoutes(db));
 app.use("/api", dogsRoutes(db));
+//-------------------------------------------------------
+app.use("/api", adminWalksRoutes(db));
 
 
 app.get('*', (req, res) => {
@@ -49,7 +53,7 @@ app.get('*', (req, res) => {
 
 
 //------ Sync Models ------------------------------------------------------------------------------------
-db.sync()
+db.sync({force: true})
   .then(() => {
     console.log("All models were synchronized successfully.");
 

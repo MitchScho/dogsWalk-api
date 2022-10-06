@@ -13,7 +13,10 @@ const Walk = db.define('walks', {
   userId: {
     type: Sequelize.INTEGER
   },
-  payed_for: {
+  payedFor: {
+    type: Sequelize.BOOLEAN
+  },
+  isAccepted: {
     type: Sequelize.BOOLEAN
   },
 });
