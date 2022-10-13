@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { Op } = require("sequelize");
 //-----------------------------------------------------------------------------------------
 //----- Models ------
 const Walk = require('../../db/models/Walk');
@@ -12,7 +13,10 @@ module.exports = (db) => {
 
     Walk.findAll({
       where: {
-        isAccepted: null
+        [Op.or]: [
+          {isAccepted: null},
+          {payedFor: null},
+      ]
       },
       include: Dog
     })
@@ -31,8 +35,6 @@ module.exports = (db) => {
 
   router.put("/admin/walks/:id", (req, res) => {
 
-    console.log("walks id req", req.body);
-    // const isAccepted = req.body.isAccepted;
     const id = req.params.id;
 
     Walk.update(req.body,
