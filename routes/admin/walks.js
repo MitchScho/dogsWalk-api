@@ -14,14 +14,14 @@ module.exports = (db) => {
     Walk.findAll({
       where: {
         [Op.or]: [
-          {isAccepted: null},
-          {payedFor: null},
-      ]
+          { isAccepted: null },
+          { payedFor: null },
+        ]
       },
       include: Dog
     })
       .then((walks) => {
-        console.log("walks", walks);
+
         res.json(walks);
       })
       .catch((err) => {
@@ -46,7 +46,7 @@ module.exports = (db) => {
       .then(() => {
         Walk.findByPk(id, { include: Dog })
           .then((updatedWalk) => {
-            res.json(updatedWalk)
+            res.json(updatedWalk);
           })
 
       })
