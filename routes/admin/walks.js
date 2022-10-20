@@ -34,7 +34,7 @@ module.exports = (db) => {
 
 
   router.put("/admin/walks/:id", (req, res) => {
-
+    console.log("body", req.body);
     const id = req.params.id;
 
     Walk.update(req.body,
@@ -49,6 +49,23 @@ module.exports = (db) => {
             res.json(updatedWalk);
           })
 
+      })
+      .catch((err) => {
+        res
+          .status(500)
+          .json({ error: err.message });
+        console.log('Query Error.....');
+      })
+  });
+
+
+  router.get("/admin/walks/:id", (req, res) => {
+    console.log("body", req.body);
+    const id = req.params.id;
+
+    Walk.findByPk(id, { include: Dog })
+      .then((walk) => {
+        res.json(walk);
       })
       .catch((err) => {
         res
