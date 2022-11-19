@@ -48,7 +48,17 @@ module.exports = (db) => {
           })
       })
 
-  })
+  });
+
+  router.delete("/walks/:id", (req, res) => { 
+
+
+    Walk.findByPk(req.params.id, { include: Dog })
+      .then((walk) => {
+        walk.destroy();
+    })
+    
+  });
 
   return router;
 };
