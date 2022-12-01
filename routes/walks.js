@@ -55,7 +55,11 @@ module.exports = (db) => {
 
     Walk.findByPk(req.params.id, { include: Dog })
       .then((walk) => {
-        walk.destroy();
+        walk.destroy()
+          .then(() => {
+            res.json();
+        })
+        
     })
     
   });
