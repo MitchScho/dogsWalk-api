@@ -30,6 +30,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(bodyParser.json())
 
+//-------------------------------------------------------
+//--- Auth ---------
+const {
+  auth
+} = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'vHVzG3Luwndn8Tko7m1zWzezKpNBWTk81MB_q9NHK69Ao_Dn75tlx22idAijoT5n',
+  baseURL: 'https://localhost:8000',
+  clientID: 'P7ZC2MHBIqKSCPY9pIcBUmyvh2gm1Osw',
+  issuerBaseURL: 'https://dev-d5mkaanpitt3z16m.us.auth0.com'
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
 
 //------ Separated Routes for each Resource -----------------------------------------------------------
 const walksRoutes = require("./routes/walks");
