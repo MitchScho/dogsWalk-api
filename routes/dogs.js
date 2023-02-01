@@ -23,8 +23,8 @@ module.exports = (db) => {
       .then((dogs) => {
         console.log(dogs)
         res.json({ message: "Hi i'm a Test" })
-      })
-  })
+      });
+  });
 
 
 

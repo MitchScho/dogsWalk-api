@@ -5,10 +5,16 @@ const PORT = process.env.SERVER_PORT || 8080;
 const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
-const app = express();
 // const models = require('./db/models')
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const passport = require("passport");
+const passportLocal = require("passport-local").Strategy;
+const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
+const session = require("express-session");
+
+const app = express();
 //----------------------------------------------------------------------------------------------------
 
 //------ Test Sequelize connection --------------------------------------------------------------------
@@ -21,37 +27,31 @@ db.authenticate()
     console.log(err.message);
   })
 
-  //----------------------------------------------------------------------------------------------------
-// Load the logger first so all (static) HTTP requests are logged to STDOUT
-// 'dev' = Concise output colored by response status for development use.
-//         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
+//----------------------------  MiddleWare  ------------------------------------------------------------------------
+
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(bodyParser.json())
+app.use(cors({
+  origin: "http://localhost:3000",  // < - -   location of the react app we're connecting to
+  credentials: true
+}));
+app.use(bodyParser.json());
+app.use(session({
+  secret: "Thisisasecretstring",
+  resave: true,
+  saveUninitialized: true,
+}));
+app.use(cookieParser("Thisisasecretstring"))
 
 //-------------------------------------------------------
+
 //--- Auth ---------
-const {
-  auth
-} = require('express-openid-connect');
 
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: 'vHVzG3Luwndn8Tko7m1zWzezKpNBWTk81MB_q9NHK69Ao_Dn75tlx22idAijoT5n',
-  baseURL: 'https://localhost:8000',
-  clientID: 'P7ZC2MHBIqKSCPY9pIcBUmyvh2gm1Osw',
-  issuerBaseURL: 'https://dev-d5mkaanpitt3z16m.us.auth0.com'
-};
 
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(auth(config));
 
-// req.isAuthenticated is provided from the auth router
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
+
+
+
 
 
 //------ Separated Routes for each Resource -----------------------------------------------------------
@@ -60,6 +60,8 @@ const usersRoutes = require("./routes/users");
 const dogsRoutes = require("./routes/dogs");
 //-----------------------------------------------------
 const adminWalksRoutes = require("./routes/admin/walks");
+//------------------------------------------------------
+const authRoutes = require('./routes/auth');
 
 
 //------ Mount all resource routes -------------------------------------------------------------------
@@ -67,7 +69,11 @@ app.use("/api", walksRoutes(db));
 app.use("/api", usersRoutes(db));
 app.use("/api", dogsRoutes(db));
 //-------------------------------------------------------
+//--- Admin ---
 app.use("/api", adminWalksRoutes(db));
+//-------------------------------------------------------
+//--- Auth ---
+app.use("/api", authRoutes(db));
 
 
 app.get('*', (req, res) => {
