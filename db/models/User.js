@@ -5,7 +5,7 @@ const db = require('..');
 //------ User Model Defined ------------------------------------------------------------------------
 
 const User = db.define('users', {
-  name: {
+  username: {
     type: Sequelize.STRING
   },
   email: {

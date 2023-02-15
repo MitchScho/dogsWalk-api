@@ -8,11 +8,20 @@ const db = require("./db");
 // const models = require('./db/models')
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const passport = require("passport");
-const passportLocal = require("passport-local").Strategy;
-const cookieParser = require("cookie-parser");
-const bcrypt = require("bcryptjs");
-const session = require("express-session");
+// const passport = require("passport");
+// const passportLocal = require("passport-local").Strategy;
+// const cookieParser = require("cookie-parser");
+// const bcrypt = require("bcryptjs");
+// const session = require("express-session");
+
+//-------------------------------------------------
+// const User = require("./db/models/User");
+// const bcrypt = require('bcryptjs');
+// const crypto = require('crypto');
+// const localStrategy = require('passport-local').Strategy;
+
+
+//---------------------------------------------------------
 
 const app = express();
 //----------------------------------------------------------------------------------------------------
@@ -36,21 +45,19 @@ app.use(cors({
   credentials: true
 }));
 app.use(bodyParser.json());
-app.use(session({
-  secret: "Thisisasecretstring",
-  resave: true,
-  saveUninitialized: true,
-}));
-app.use(cookieParser("Thisisasecretstring"))
-
+app.use(express.json());
+// app.use(session({
+//   secret: "Thisisasecretstring",
+//   resave: true,
+//   saveUninitialized: true,
+// }));
+// app.use(cookieParser("Thisisasecretstring"))
+// app.use(passport.initialize());
+// app.use(passport.session());
+// require('./passportConfig')(passport);
 //-------------------------------------------------------
 
 //--- Auth ---------
-
-
-
-
-
 
 
 
