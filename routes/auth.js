@@ -1,14 +1,10 @@
 const express = require('express');
-const User = require("../db/models/User");
-const bcrypt = require("bcryptjs");
-// const passport = require("passport");
-// require('../passportConfig')(passport);
 const dotenv = require('dotenv')
-const jwt = require('jsonwebtoken');
 // get config vars
 dotenv.config();
-
-
+const User = require("../db/models/User");
+const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -16,22 +12,6 @@ const router = express.Router();
 
 module.exports = (db) => {
 
-
-  // router.post("/login", passport.authenticate("local", (req, res) => {
-  //   // res.json({ message: "Successfully Authenticated"})
-  //   res.send("Successfully Authenticated");
-  // }));
-
-  //--------------------------------------------------------------------------------------------------------------
-
-  //---Login example route from Passport---
-
-  // router.post('/login', passport.authenticate('local', {
-  //   successRedirect: '/',
-  //   failureRedirect: '/login'
-  // }));
-
-  //------------------------------------------------------------------------------------------------
 
   router.post("/login", async (req, res) => {
 
@@ -50,11 +30,13 @@ module.exports = (db) => {
       if (await bcrypt.compare(req.body.password, user.password)) {
 
         const accessToken = jwt.sign({
+          id: user.id,
           username: user.username
         }, process.env.ACCESS_TOKEN_SECRET)
 
-        res.json({ accessToken })
-        
+
+        res.json({accessToken})
+
       } else {
         res.send('Not Allowed');
       }
@@ -62,32 +44,28 @@ module.exports = (db) => {
       res.status(500).send();
     }
 
-
-
   });
-  // function generateAccessToken(username) {
-  //   return jwt.sign(username, process.env.TOKEN_SECRET, {
-  //     expiresIn: '1800s'
-  //   });
-  // }
 
-  // passport.authenticate("local", (err, user, info) => {
-  //   console.log("User for authentication", user);
-  //   console.log("authenticate error", err);
-  //   if (err) throw err;
-  //   if (!user) res.send("No User Exists");
-  //   else {
-  //     req.logIn(user, err => {
-  //       if (err) throw err;
-  //       res.send('Successfully Authenticated');
-  //       console.log("Authenticated User", user)
-  //     })
-  //   }
-  // })(req, res, next);
+  //------------------------------------------------------------------------------------------------
 
-  // res.json({
-  //   message: "Hi i'm a login message"
-  // })
+  function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      console.log(err)
+
+      if (err) return res.sendStatus(403)
+
+      req.user = user
+
+      next()
+    })
+  }
+
+
 
   //-------------------------------------------------------------------------------------------------------
 
@@ -126,18 +104,25 @@ module.exports = (db) => {
         }
       })
 
-
-    // res.json({
-    //   message: "Hi i'm a register message"
-    // })
-
   });
 
   //-----------------------------------------------------------------------------------------------------------------------------
 
-  // router.get("/user", (req, res) => {
+ 
+  router.get("/me", authenticateToken, (req, res) => {
 
-  // });
+   
+    User.findOne({
+      where: {
+        id: req.user.id,
+        
+      }
+    })
+      .then((user) => {
+        
+        res.json(user);
+    })
+  });
 
 
 

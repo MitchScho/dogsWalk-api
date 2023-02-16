@@ -8,25 +8,15 @@ const db = require("./db");
 // const models = require('./db/models')
 const bodyParser = require("body-parser");
 const cors = require("cors");
-// const passport = require("passport");
-// const passportLocal = require("passport-local").Strategy;
 // const cookieParser = require("cookie-parser");
-// const bcrypt = require("bcryptjs");
-// const session = require("express-session");
-
-//-------------------------------------------------
-// const User = require("./db/models/User");
-// const bcrypt = require('bcryptjs');
-// const crypto = require('crypto');
-// const localStrategy = require('passport-local').Strategy;
-
 
 //---------------------------------------------------------
 
 const app = express();
+
 //----------------------------------------------------------------------------------------------------
 
-//------ Test Sequelize connection --------------------------------------------------------------------
+//------ Test Sequelize connection -------
 
 db.authenticate()
   .then(() => {
