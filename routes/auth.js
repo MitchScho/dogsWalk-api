@@ -15,7 +15,7 @@ module.exports = (db) => {
 
   router.post("/login", async (req, res) => {
 
-    console.log("Login req.body", req.body);
+    // console.log("Login req.body", req.body);
 
 
     const user = await User.findOne({
@@ -72,7 +72,7 @@ module.exports = (db) => {
   //-- Register ---
 
   router.post("/register", (req, res) => {
-    console.log("Register body", req.body);
+    // console.log("Register body", req.body);
 
     User.findOne({
         where: {
@@ -86,7 +86,7 @@ module.exports = (db) => {
         }
         if (!user) {
 
-          console.log("password", req.body.pass);
+          // console.log("password", req.body.pass);
 
           bcrypt.hash(req.body.pass, 10, function (err, hash) {
 
@@ -95,8 +95,9 @@ module.exports = (db) => {
                 email: req.body.email,
                 password: hash
               })
-              .then((res) => {
-                console.log('New User Created', res);
+              .then(() => {
+                console.log('New User Created');
+
               })
               .catch((err) => console.log(err.message))
           });
@@ -108,18 +109,18 @@ module.exports = (db) => {
 
   //-----------------------------------------------------------------------------------------------------------------------------
 
- 
+
   router.get("/me", authenticateToken, (req, res) => {
 
-   
+
     User.findOne({
       where: {
         id: req.user.id,
-        
+
       }
     })
       .then((user) => {
-        
+console.log("user", user)
         res.json(user);
     })
   });
