@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const db = require('..');
 const Dog = require('./Dog');
 const User = require('./User');
@@ -8,16 +8,17 @@ const WalkDog = require('./WalkDog');
 
 const Walk = db.define('walks', {
   date: {
-    type: Sequelize.DATE
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   },
   userId: {
-    type: Sequelize.INTEGER
+    type: DataTypes.INTEGER
   },
   payedFor: {
-    type: Sequelize.BOOLEAN
+    type: DataTypes.BOOLEAN
   },
   isAccepted: {
-    type: Sequelize.BOOLEAN
+    type: DataTypes.BOOLEAN
   },
 });
 //-------------------------------------------------------------------------------------------------

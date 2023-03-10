@@ -1,23 +1,18 @@
 const express = require('express');
-const dotenv = require('dotenv')
-// get config vars
-dotenv.config();
-const User = require("../db/models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
-
 const router = express.Router();
+const bcrypt = require("bcryptjs");
+//--- Model Imports ---
+const User = require("../db/models/User");
+//--- Helper Imports ---
+const {authenticateToken} = require('../middleware/authenticate');
+const genAuthToken = require('../helpers/genAuthToken');
 
 //--------------------------------------------------------------------------------------------------
 
 module.exports = (db) => {
 
-
   router.post("/login", async (req, res) => {
-
-    // console.log("Login req.body", req.body);
-
-
+    console.log("body ===>",req.body);
     const user = await User.findOne({
       where: {
         username: req.body.username
@@ -27,52 +22,26 @@ module.exports = (db) => {
       return res.status(400).send("No User Exists");
     }
     try {
+      console.log("user pw ==> ",user.password);
+      console.log("pw", req.body.password);
+
       if (await bcrypt.compare(req.body.password, user.password)) {
-
-        const accessToken = jwt.sign({
-          id: user.id,
-          username: user.username
-        }, process.env.ACCESS_TOKEN_SECRET)
-
-
-        res.json({accessToken})
+        console.log("pw authenticated");
+        const accessToken = genAuthToken(user);
+        console.log(accessToken);
+        res.json({ accessToken });
 
       } else {
-        res.send('Not Allowed');
+        res.status(400).send('Not Allowed');
       }
     } catch {
       res.status(500).send();
     }
-
   });
-
-  //------------------------------------------------------------------------------------------------
-
-  function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-
-    if (token == null) return res.sendStatus(401)
-
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      console.log(err)
-
-      if (err) return res.sendStatus(403)
-
-      req.user = user
-
-      next()
-    })
-  }
-
-
 
   //-------------------------------------------------------------------------------------------------------
 
-  //-- Register ---
-
   router.post("/register", (req, res) => {
-    // console.log("Register body", req.body);
 
     User.findOne({
         where: {
@@ -82,11 +51,8 @@ module.exports = (db) => {
       .then((user) => {
         if (user) {
           res.send("User already exists");
-
         }
         if (!user) {
-
-          // console.log("password", req.body.pass);
 
           bcrypt.hash(req.body.pass, 10, function (err, hash) {
 
@@ -97,35 +63,28 @@ module.exports = (db) => {
               })
               .then(() => {
                 console.log('New User Created');
-
               })
               .catch((err) => console.log(err.message))
           });
-
         }
       })
-
   });
+
+
 
   //-----------------------------------------------------------------------------------------------------------------------------
 
-
   router.get("/me", authenticateToken, (req, res) => {
 
-
     User.findOne({
-      where: {
-        id: req.user.id,
-
-      }
-    })
+        where: {
+          id: req.user.id,
+        }
+      })
       .then((user) => {
-console.log("user", user)
         res.json(user);
-    })
+      })
   });
-
-
 
   return router;
 };

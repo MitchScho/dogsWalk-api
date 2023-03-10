@@ -1,7 +1,6 @@
 const router = require("express").Router();
-const {
-  Op
-} = require("sequelize");
+const {Op} = require("sequelize");
+const {isAdmin} = require("../../middleware/authenticate");
 //-----------------------------------------------------------------------------------------
 //----- Models ------
 const Walk = require('../../db/models/Walk');
@@ -11,7 +10,9 @@ const Dog = require('../../db/models/Dog');
 
 module.exports = (db) => {
 
-  router.get("/admin/walks", (req, res) => {
+  router.get("/admin/walks",isAdmin, (req, res) => {
+
+    console.log(" get admin walks");
 
     Walk.findAll({
         where: {
@@ -45,7 +46,7 @@ module.exports = (db) => {
 
 
 
-  router.put("/admin/walks/:id", (req, res) => {
+  router.put("/admin/walks/:id", isAdmin, (req, res) => {
 
     const id = req.params.id;
 
@@ -59,9 +60,8 @@ module.exports = (db) => {
             include: Dog
           })
           .then((updatedWalk) => {
-            console.log("Hello Hello")
 
-            console.log("updatedWalk  = = = =>", updatedWalk.dogs[0].name);
+            // console.log("updatedWalk  = = = =>", updatedWalk.dogs[0].name);
 
             const userPhone = '+61421072309' //updatedWalk.user.phoneNumber;
             const userDog = updatedWalk.dogs[0].name;
@@ -88,8 +88,8 @@ module.exports = (db) => {
   });
 
 
-  router.get("/admin/walks/:id", (req, res) => {
-    // console.log("body", req.body);
+  router.get("/admin/walks/:id", isAdmin, (req, res) => {
+
     const id = req.params.id;
 
     Walk.findByPk(id, {
