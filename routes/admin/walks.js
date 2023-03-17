@@ -63,7 +63,7 @@ module.exports = (db) => {
 
             // console.log("updatedWalk  = = = =>", updatedWalk.dogs[0].name);
 
-            const userPhone = '+61421072309' //updatedWalk.user.phoneNumber;
+            const userPhone = '+12502539813' //updatedWalk.user.phoneNumber;
             const userDog = updatedWalk.dogs[0].name;
             client.messages
               .create({

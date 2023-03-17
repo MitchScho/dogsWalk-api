@@ -12,7 +12,7 @@ const genAuthToken = require('../helpers/genAuthToken');
 module.exports = (db) => {
 
   router.post("/login", async (req, res) => {
-    console.log("body ===>",req.body);
+
     const user = await User.findOne({
       where: {
         username: req.body.username
@@ -22,14 +22,12 @@ module.exports = (db) => {
       return res.status(400).send("No User Exists");
     }
     try {
-      console.log("user pw ==> ",user.password);
-      console.log("pw", req.body.password);
 
       if (await bcrypt.compare(req.body.password, user.password)) {
-        console.log("pw authenticated");
+
         const accessToken = genAuthToken(user);
-        console.log(accessToken);
-        res.json({ accessToken });
+
+        res.json({ accessToken, user });
 
       } else {
         res.status(400).send('Not Allowed');
