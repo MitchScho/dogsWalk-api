@@ -9,14 +9,14 @@ const WalkRequest = require('../db/models/WalkRequest');
 //-------------------------------------------------------------------------------------------
 
 module.exports = (db) => {
-  router.get("/walks", (req, res) => {
+  router.get("/walks-requests", (req, res) => {
 
     Walk.findAll({
         include: Dog
       })
-      .then((walks) => {
+      .then((walkRequests) => {
 
-        res.json(walks);
+        res.json(walkRequests);
       })
       .catch((err) => {
         res

@@ -11,15 +11,6 @@ const Walk = db.define('walks', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   },
-  userId: {
-    type: DataTypes.INTEGER
-  },
-  payedFor: {
-    type: DataTypes.BOOLEAN
-  },
-  isAccepted: {
-    type: DataTypes.BOOLEAN
-  },
 });
 //-------------------------------------------------------------------------------------------------
 

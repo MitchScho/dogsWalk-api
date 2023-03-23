@@ -7,9 +7,19 @@ const WalkRequestDog = require('./WalkRequestDog');
 //------ WalkDog Model Defined ----------------------------------------------------------------------------
 
 const WalkRequest = db.define('walk_request', {
+  date: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
   userId: {
     type: DataTypes.INTEGER,
-  }
+  },
+  payedFor: {
+    type: DataTypes.BOOLEAN
+  },
+  isAccepted: {
+    type: DataTypes.BOOLEAN
+  },
 
 });
 //---------------------------------------------------------------------------------------------------
