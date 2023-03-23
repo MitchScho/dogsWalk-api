@@ -46,7 +46,7 @@ module.exports = (db) => {
 
 
 
-  router.put("/admin/walks/:id", isAdmin, (req, res) => {
+  router.put("/admin/walks-requests/:id", isAdmin, (req, res) => {
 
     const id = req.params.id;
 

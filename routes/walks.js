@@ -2,9 +2,10 @@ const router = require("express").Router();
 //-----------------------------------------------------------------------------------------
 //----- Models ------
 const Walk = require('../db/models/Walk');
+const WalkRequestDog = require('../db/models/WalkRequestDog');
 const Dog = require('../db/models/Dog');
 const WalkDog = require('../db/models/WalkDog');
-
+const WalkRequest = require('../db/models/WalkRequest');
 //-------------------------------------------------------------------------------------------
 
 module.exports = (db) => {
@@ -33,41 +34,42 @@ module.exports = (db) => {
 
 
   //-------------------------------------------------------------------------
-  router.post("/walks", (req, res) => {
+  router.post("/walks-requests", (req, res) => {
 
     const date = req.body.date;
+    const user = req.body.user;
     const dogs = req.body.selectedDogs;
 
-    Walk.create({
-        date: date
+    WalkRequest.create({
+      date: date,
+      userId: user.id
       })
+      .then((walkRequest) => {
 
-      .then((walk) => {
-
-        const inserts = dogs.map((dog) =>
-          WalkDog.create({
-            walkId: walk.dataValues.id,
+        const walkRequestDogs = dogs.map((dog) =>
+          WalkRequestDog.create({
+            walkRequestId: walkRequest.dataValues.id,
             dogId: dog.id
           }))
-        Promise.all(inserts)
+        Promise.all(walkRequestDogs)
           .then(() => {
 
-            Walk.findByPk(walk.dataValues.id, {
+            WalkRequest.findByPk(walkRequest.dataValues.id, {
                 include: Dog
               })
-              .then((createdWalk) => {
+              .then((walkRequest) => {
 
                 // const adminPhone = look up user with type admin
-                res.json(createdWalk);
-                
+                res.json(walkRequest);
+
                 client.messages
                 .create({
                   body: 'Requested Dog Walk from Mitchell?',
                   from: '+13087734330',
-                  to: '+61421072309',
+                  to: '+12502539813',
                 })
                 .then(message => console.log(message.sid));
-                
+
               })
           })
       })
