@@ -1,6 +1,10 @@
 const router = require("express").Router();
-const {Op} = require("sequelize");
-const {isAdmin} = require("../../middleware/authenticate");
+const {
+  Op
+} = require("sequelize");
+const {
+  isAdmin
+} = require("../../middleware/authenticate");
 //-----------------------------------------------------------------------------------------
 //----- Models ------
 const Walk = require('../../db/models/Walk');
@@ -11,7 +15,7 @@ const WalkDog = require("../../db/models/WalkDog");
 
 module.exports = (db) => {
 
-  router.get("/admin/walks-requests",isAdmin, (req, res) => {
+  router.get("/admin/walks-requests", isAdmin, (req, res) => {
 
     console.log(" get admin walks");
 
@@ -27,9 +31,9 @@ module.exports = (db) => {
         },
         include: Dog
       })
-      .then((walks) => {
+      .then((walkRequests) => {
 
-        res.json(walks);
+        res.json(walkRequests);
       })
       .catch((err) => {
         res
@@ -48,48 +52,111 @@ module.exports = (db) => {
 
 
   router.put("/admin/walks-requests/:id", isAdmin, async (req, res) => {
-
+    console.log("request body", req.body);
     const id = req.params.id;
+    const payload = req.body;
 
-    const walkRequest = await WalkRequest.findOne({
-      where: {
-        id: id
-      }
-    })
+    const walkRequest = await WalkRequest.findByPk(id, {
+      include: Dog
+    });
 
-    const approve = req.body.isAccepted
+    const isAccepted = payload.isAccepted !== undefined ? payload.isAccepted : walkRequest.isAccepted;
+    const payedFor = payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
 
-    if (approve) {
-      await walkRequest.update({
-        approved: true
+    walkRequest.isAccepted = isAccepted
+    walkRequest.payedFor = payedFor;
+
+
+    await walkRequest.save();
+
+    console.log(" walk request after save", walkRequest);
+
+    const approved = walkRequest.isAccepted;
+    if (approved) {
+
+      let walk = await Walk.findOrCreate({
+        where: {
+          date: walkRequest.date
+        }
+
       });
 
-      let walk;
-      walk = await Walk.findOne({
+      console.log(" walk request before adding dogs", walkRequest);
+      console.log("walk ", walk);
+      // console.log("walk - dogs", dog.id)
+
+
+      await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
+        walkId: walk[0].dataValues.id,
+        dogId: dog.id
+      })))
+
+      console.log(" walk after adding dogs", walk);
+
+    } else {
+        const walk = await Walk.findOne({
         where: {
           date: walkRequest.date
         }
       })
 
-      if (!walk) {
-        walk = Walk.create({
-          date: date
-        })
-      }
+      console.log(" walk before deleting dogs", walk);
 
-      await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
+      await Promise.all(walkRequest.dogs.map(dog => WalkDog.destroy({
+        where: {
         walkId: walk.id,
         dogId: dog.id
-      })))
-    } else {
-      walkRequest.update({
-        approved: false
-      });
-    }
+      }})))
 
-    return res.json({
-    walkRequest: walkRequest
-    })
+      console.log(" walk after deleting dogs", walk);
+    }
+    return res.json(walkRequest);
+
+
+    // const walkRequest = await WalkRequest.findOne({
+
+
+
+
+    //   where: {
+    //     id: id
+    //   }
+    // })
+
+
+    // const approve = req.body.isAccepted
+
+    // if (approve) {
+    //   await walkRequest.update({
+    //     approved: true
+    //   });
+
+    //   let walk;
+    //   walk = await Walk.findOne({
+    //     where: {
+    //       date: walkRequest.date
+    //     }
+    //   })
+
+    //   if (!walk) {
+    //     walk = Walk.create({
+    //       date: date
+    //     })
+    // }
+
+    //   await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
+    //     walkId: walk.id,
+    //     dogId: dog.id
+    //   })))
+    // } else {
+    //   walkRequest.update({
+    //     approved: false
+    //   });
+    // }
+
+    // return res.json({
+    // walkRequest: walkRequest
+    // })
   });
 
   // WalkRequest.findOne({
@@ -152,15 +219,15 @@ module.exports = (db) => {
   //   .then(message => console.log(message.sid));
 
 
-  router.get("/admin/walks/:id", isAdmin, (req, res) => {
+  router.get("/admin/walks-requests/:id", isAdmin, (req, res) => {
 
     const id = req.params.id;
 
-    Walk.findByPk(id, {
+    WalkRequest.findByPk(id, {
         include: Dog
       })
-      .then((walk) => {
-        res.json(walk);
+      .then((walkRequest) => {
+        res.json(walkRequest);
       })
       .catch((err) => {
         res

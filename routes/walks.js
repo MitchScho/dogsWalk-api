@@ -28,6 +28,27 @@ module.exports = (db) => {
       })
   });
 
+  //-----------------------------------------------------------------------------------------
+
+  router.get("/walks", (req, res) => {
+
+    Walk.findAll({
+        include: Dog
+      })
+      .then((walks) => {
+
+        res.json(walks);
+      })
+      .catch((err) => {
+        res
+          .status(500)
+          .json({
+            error: err.message
+          });
+        console.log('Query Error.....');
+      })
+  });
+
   //---------------------------------------------------------------------------------
   //---Twilio ----
   const client = require('twilio')("ACaca7aaf27930135c91101895427a47a1", "d822ce3d49fe76de018fdd9f16e97c24");
