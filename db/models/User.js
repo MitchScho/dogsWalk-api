@@ -8,14 +8,16 @@ const Dog = require('./Dog');
 const User = db.define('users', {
   username: {
     type: Sequelize.STRING,
-    allowNull: false
+
+
   },
   email: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING,
+
   },
   password: {
     type: Sequelize.STRING,
-    allowNull: false
+
   },
   role: {
     type: Sequelize.STRING,

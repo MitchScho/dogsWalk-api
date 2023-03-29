@@ -70,19 +70,21 @@ module.exports = (db) => {
     await walkRequest.save();
 
     console.log(" walk request after save", walkRequest);
+    console.log("walkRequest payedFor", walkRequest.payedFor);
+    console.log("walkRequest isAccepted", walkRequest.isAccepted);
 
-    const approved = walkRequest.isAccepted;
+    const approved = walkRequest.isAccepted && payload.isAccepted;
     if (approved) {
 
       let walk = await Walk.findOrCreate({
         where: {
           date: walkRequest.date
-        }
-
+        },
+        include: Dog
       });
 
       console.log(" walk request before adding dogs", walkRequest);
-      console.log("walk ", walk);
+      console.log("walk before adding dogs ", walk);
       // console.log("walk - dogs", dog.id)
 
 
@@ -93,6 +95,7 @@ module.exports = (db) => {
 
       console.log(" walk after adding dogs", walk);
 
+
     } else {
         const walk = await Walk.findOne({
         where: {
@@ -101,6 +104,7 @@ module.exports = (db) => {
       })
 
       console.log(" walk before deleting dogs", walk);
+      console.log(" walk id before deleting dogs", walk.id);
 
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.destroy({
         where: {
@@ -110,54 +114,55 @@ module.exports = (db) => {
 
       console.log(" walk after deleting dogs", walk);
     }
+    console.log("walk request before return", walkRequest);
     return res.json(walkRequest);
 
 
-    // const walkRequest = await WalkRequest.findOne({
-
-
-
-
-    //   where: {
-    //     id: id
-    //   }
-    // })
-
-
-    // const approve = req.body.isAccepted
-
-    // if (approve) {
-    //   await walkRequest.update({
-    //     approved: true
-    //   });
-
-    //   let walk;
-    //   walk = await Walk.findOne({
-    //     where: {
-    //       date: walkRequest.date
-    //     }
-    //   })
-
-    //   if (!walk) {
-    //     walk = Walk.create({
-    //       date: date
-    //     })
-    // }
-
-    //   await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
-    //     walkId: walk.id,
-    //     dogId: dog.id
-    //   })))
-    // } else {
-    //   walkRequest.update({
-    //     approved: false
-    //   });
-    // }
-
-    // return res.json({
-    // walkRequest: walkRequest
-    // })
   });
+  // const walkRequest = await WalkRequest.findOne({
+
+
+
+
+  //   where: {
+  //     id: id
+  //   }
+  // })
+
+
+  // const approve = req.body.isAccepted
+
+  // if (approve) {
+  //   await walkRequest.update({
+  //     approved: true
+  //   });
+
+  //   let walk;
+  //   walk = await Walk.findOne({
+  //     where: {
+  //       date: walkRequest.date
+  //     }
+  //   })
+
+  //   if (!walk) {
+  //     walk = Walk.create({
+  //       date: date
+  //     })
+  // }
+
+  //   await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
+  //     walkId: walk.id,
+  //     dogId: dog.id
+  //   })))
+  // } else {
+  //   walkRequest.update({
+  //     approved: false
+  //   });
+  // }
+
+  // return res.json({
+  // walkRequest: walkRequest
+  // })
 
   // WalkRequest.findOne({
   //       where: {
