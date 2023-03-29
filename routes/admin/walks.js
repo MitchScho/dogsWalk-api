@@ -17,8 +17,6 @@ module.exports = (db) => {
 
   router.get("/admin/walks-requests", isAdmin, (req, res) => {
 
-    console.log(" get admin walks");
-
     WalkRequest.findAll({
         where: {
           [Op.or]: [{
@@ -52,7 +50,7 @@ module.exports = (db) => {
 
 
   router.put("/admin/walks-requests/:id", isAdmin, async (req, res) => {
-    console.log("request body", req.body);
+
     const id = req.params.id;
     const payload = req.body;
 
@@ -66,14 +64,10 @@ module.exports = (db) => {
     walkRequest.isAccepted = isAccepted
     walkRequest.payedFor = payedFor;
 
-
     await walkRequest.save();
 
-    console.log(" walk request after save", walkRequest);
-    console.log("walkRequest payedFor", walkRequest.payedFor);
-    console.log("walkRequest isAccepted", walkRequest.isAccepted);
-
     const approved = walkRequest.isAccepted && payload.isAccepted;
+
     if (approved) {
 
       let walk = await Walk.findOrCreate({
@@ -83,18 +77,21 @@ module.exports = (db) => {
         include: Dog
       });
 
-      console.log(" walk request before adding dogs", walkRequest);
-      console.log("walk before adding dogs ", walk);
-      // console.log("walk - dogs", dog.id)
-
-
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
         walkId: walk[0].dataValues.id,
         dogId: dog.id
       })))
 
-      console.log(" walk after adding dogs", walk);
+      const userPhone = '+12502539813' //updatedWalk.user.phoneNumber;
+      const userDog = updatedWalk.dogs[0].name;
 
+      client.messages
+        .create({
+          body: `Kelsey has accepted your dog walk request for ${userDog}.`,
+          from: '+13087734330',
+          to: userPhone,
+        })
+        .then(message => console.log(message.sid));
 
     } else {
         const walk = await Walk.findOne({
@@ -103,125 +100,17 @@ module.exports = (db) => {
         }
       })
 
-      console.log(" walk before deleting dogs", walk);
-      console.log(" walk id before deleting dogs", walk.id);
-
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.destroy({
         where: {
         walkId: walk.id,
         dogId: dog.id
       }})))
-
-      console.log(" walk after deleting dogs", walk);
     }
-    console.log("walk request before return", walkRequest);
+
     return res.json(walkRequest);
 
 
   });
-  // const walkRequest = await WalkRequest.findOne({
-
-
-
-
-  //   where: {
-  //     id: id
-  //   }
-  // })
-
-
-  // const approve = req.body.isAccepted
-
-  // if (approve) {
-  //   await walkRequest.update({
-  //     approved: true
-  //   });
-
-  //   let walk;
-  //   walk = await Walk.findOne({
-  //     where: {
-  //       date: walkRequest.date
-  //     }
-  //   })
-
-  //   if (!walk) {
-  //     walk = Walk.create({
-  //       date: date
-  //     })
-  // }
-
-  //   await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
-  //     walkId: walk.id,
-  //     dogId: dog.id
-  //   })))
-  // } else {
-  //   walkRequest.update({
-  //     approved: false
-  //   });
-  // }
-
-  // return res.json({
-  // walkRequest: walkRequest
-  // })
-
-  // WalkRequest.findOne({
-  //       where: {
-  //         id: id
-  //       }
-  //     })
-  //     .then((walkRequest) => {
-
-  //       if (req.body) {
-  //         walkRequest.update(req.body)
-  //       }
-
-  //       Walk.findOne({
-  //         where: {
-  //           date: walkRequest.date
-  //         }
-  //       })
-  //         .then((walk) => {
-
-  //         if (!walk) {
-  //           Walk.create({date: req.body.date })
-  //         }
-  //           const walkRequestDogs = walkRequest.dogs;
-  //           walkRequestDogs.map(dog => WalkDog.create({ walkId: walk.dataValuesid, dogId: dog.id }))
-
-  //           Promise.all(walkRequestDogs)(() => {
-
-  //           })
-
-  //       })
-
-
-  //     })
-  //     .catch((err) => {
-  //       res
-  //         .status(500)
-  //         .json({
-  //           error: err.message
-  //         });
-  //       console.log('Query Error.....');
-  //     })
-
-  //  Walk.findByPk(id, {
-  //      include: Dog
-  //    })
-  //    .then((updatedWalk) => {
-
-  //      res.json(updatedWalk);
-  //    })
-
-  // const userPhone = '+12502539813' //updatedWalk.user.phoneNumber;
-  // const userDog = updatedWalk.dogs[0].name;
-  // client.messages
-  //   .create({
-  //     body: `Kelsey has accepted your dog walk request for ${userDog}.`,
-  //     from: '+13087734330',
-  //     to: userPhone,
-  //   })
-  //   .then(message => console.log(message.sid));
 
 
   router.get("/admin/walks-requests/:id", isAdmin, (req, res) => {
