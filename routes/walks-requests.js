@@ -4,14 +4,14 @@ const router = require("express").Router();
 const Walk = require('../db/models/Walk');
 const WalkRequestDog = require('../db/models/WalkRequestDog');
 const Dog = require('../db/models/Dog');
-const WalkDog = require('../db/models/WalkDog');
+// const WalkDog = require('../db/models/WalkDog');
 const WalkRequest = require('../db/models/WalkRequest');
 //-------------------------------------------------------------------------------------------
 
 module.exports = (db) => {
   router.get("/walks-requests", (req, res) => {
 
-    Walk.findAll({
+    WalkRequest.findAll({
         include: Dog
       })
       .then((walkRequests) => {
@@ -102,14 +102,14 @@ module.exports = (db) => {
 // })
 
 
-  router.delete("/walks/:id", (req, res) => {
+  router.delete("/walks-requests/:id", (req, res) => {
 
 
-    Walk.findByPk(req.params.id, {
+    WalkRequest.findByPk(req.params.id, {
         include: Dog
       })
-      .then((walk) => {
-        walk.destroy()
+      .then((walkRequest) => {
+        walkRequest.destroy()
           .then(() => {
             res.json();
           })

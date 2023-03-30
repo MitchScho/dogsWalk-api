@@ -52,7 +52,7 @@ app.use(express.json());
 
 
 //------ Separated Routes for each Resource -----------------------------------------------------------
-const walksRoutes = require("./routes/walks");
+const walksRequestsRoutes = require("./routes/walks-requests");
 const usersRoutes = require("./routes/users");
 const dogsRoutes = require("./routes/dogs");
 //-----------------------------------------------------
@@ -62,7 +62,7 @@ const authRoutes = require('./routes/auth');
 
 
 //------ Mount all resource routes -------------------------------------------------------------------
-app.use("/api", walksRoutes(db));
+app.use("/api", walksRequestsRoutes(db));
 app.use("/api", usersRoutes(db));
 app.use("/api", dogsRoutes(db));
 //-------------------------------------------------------

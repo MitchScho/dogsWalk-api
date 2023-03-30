@@ -82,16 +82,16 @@ module.exports = (db) => {
         dogId: dog.id
       })))
 
-      const userPhone = '+12502539813' //updatedWalk.user.phoneNumber;
-      const userDog = updatedWalk.dogs[0].name;
+      // const userPhone = '+12502539813' //updatedWalk.user.phoneNumber;
+      // const userDog = walk.dogs[0].name;
 
-      client.messages
-        .create({
-          body: `Kelsey has accepted your dog walk request for ${userDog}.`,
-          from: '+13087734330',
-          to: userPhone,
-        })
-        .then(message => console.log(message.sid));
+      // client.messages
+      //   .create({
+      //     body: `Kelsey has accepted your dog walk request for ${userDog}.`,
+      //     from: '+13087734330',
+      //     to: userPhone,
+      //   })
+      //   .then(message => console.log(message.sid));
 
     } else {
         const walk = await Walk.findOne({
