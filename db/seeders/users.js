@@ -13,9 +13,19 @@ module.exports = {
 
     },
     {
-      username: 'Neighbour',
-      email: 'neighbour@neighbour.com',
-      password: "1234",
+      username: 'Danny',
+      email: 'danny@danny.com',
+      password: "$2a$10$wy/.Ou5x36dVkVceA7A5A.LCosxMENOHS0yap3UOrRAJiAFNYCB3e",
+      role: "client",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+
+    },
+    {
+      username: 'Rupert',
+      email: 'rupert@rupert.com',
+      password: "$2a$10$wy/.Ou5x36dVkVceA7A5A.LCosxMENOHS0yap3UOrRAJiAFNYCB3e",
+      role: "client",
       createdAt: new Date(),
       updatedAt: new Date(),
 

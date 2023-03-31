@@ -4,7 +4,6 @@ const router = require("express").Router();
 const Walk = require('../db/models/Walk');
 const WalkRequestDog = require('../db/models/WalkRequestDog');
 const Dog = require('../db/models/Dog');
-// const WalkDog = require('../db/models/WalkDog');
 const WalkRequest = require('../db/models/WalkRequest');
 //-------------------------------------------------------------------------------------------
 
@@ -104,7 +103,6 @@ module.exports = (db) => {
 
   router.delete("/walks-requests/:id", (req, res) => {
 
-
     WalkRequest.findByPk(req.params.id, {
         include: Dog
       })
@@ -113,9 +111,7 @@ module.exports = (db) => {
           .then(() => {
             res.json();
           })
-
       })
-
   });
 
   return router;

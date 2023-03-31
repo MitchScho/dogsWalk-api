@@ -1,10 +1,6 @@
 const router = require("express").Router();
-const {
-  Op
-} = require("sequelize");
-const {
-  isAdmin
-} = require("../../middleware/authenticate");
+const {Op} = require("sequelize");
+const {isAdmin} = require("../../middleware/authenticate");
 //-----------------------------------------------------------------------------------------
 //----- Models ------
 const Walk = require('../../db/models/Walk');
@@ -132,8 +128,6 @@ module.exports = (db) => {
         console.log('Query Error.....');
       })
   });
-
-
 
   return router;
 };

@@ -8,7 +8,6 @@ const db = require("./db");
 // const models = require('./db/models')
 const bodyParser = require("body-parser");
 const cors = require("cors");
-// const cookieParser = require("cookie-parser");
 
 //---------------------------------------------------------
 
@@ -36,19 +35,6 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 app.use(express.json());
-// app.use(session({
-//   secret: "Thisisasecretstring",
-//   resave: true,
-//   saveUninitialized: true,
-// }));
-// app.use(cookieParser("Thisisasecretstring"))
-// app.use(passport.initialize());
-// app.use(passport.session());
-// require('./passportConfig')(passport);
-//-------------------------------------------------------
-
-//--- Auth ---------
-
 
 
 //------ Separated Routes for each Resource -----------------------------------------------------------
@@ -59,7 +45,6 @@ const dogsRoutes = require("./routes/dogs");
 const adminWalksRoutes = require("./routes/admin/walks");
 //------------------------------------------------------
 const authRoutes = require('./routes/auth');
-
 
 //------ Mount all resource routes -------------------------------------------------------------------
 app.use("/api", walksRequestsRoutes(db));

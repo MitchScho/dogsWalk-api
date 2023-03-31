@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const { DataTypes } = require('sequelize');
 const User = require('./User');
 
 const db = require('..');
@@ -9,10 +9,10 @@ const db = require('..');
 
 const Dog = db.define('dogs', {
   name: {
-    type: Sequelize.STRING
+    type: DataTypes.STRING
   },
   avatar: {
-    type: Sequelize.STRING
+    type: DataTypes.STRING
   },
 });
 

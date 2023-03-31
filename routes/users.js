@@ -7,7 +7,7 @@ module.exports = (db) => {
 
     User.findAll()
       .then((users) => {
-        
+
         res.json(users);
       })
       .catch(err => {
@@ -16,9 +16,6 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
-
-
-
 
   return router;
 };
