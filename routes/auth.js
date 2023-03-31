@@ -59,7 +59,8 @@ module.exports = (db) => {
                 email: req.body.email,
                 password: hash
               })
-              .then(() => {
+              .then((response) => {
+                res.send(response);
                 console.log('New User Created');
               })
               .catch((err) => console.log(err.message))
