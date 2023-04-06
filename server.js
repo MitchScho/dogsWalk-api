@@ -41,8 +41,9 @@ app.use(express.json());
 const walksRequestsRoutes = require("./routes/walks-requests");
 const usersRoutes = require("./routes/users");
 const dogsRoutes = require("./routes/dogs");
+const walksRoutes = require("./routes/walks");
 //-----------------------------------------------------
-const adminWalksRoutes = require("./routes/admin/walks");
+const adminWalksRequestsRoutes = require("./routes/admin/walks-requests");
 //------------------------------------------------------
 const authRoutes = require('./routes/auth');
 
@@ -50,9 +51,10 @@ const authRoutes = require('./routes/auth');
 app.use("/api", walksRequestsRoutes(db));
 app.use("/api", usersRoutes(db));
 app.use("/api", dogsRoutes(db));
+app.use("/api", walksRoutes(db));
 //-------------------------------------------------------
 //--- Admin ---
-app.use("/api", adminWalksRoutes(db));
+app.use("/api", adminWalksRequestsRoutes(db));
 //-------------------------------------------------------
 //--- Auth ---
 app.use("/api", authRoutes(db));

@@ -1,7 +1,6 @@
 const router = require("express").Router();
 //-----------------------------------------------------------------------------------------
 //----- Models ------
-const Walk = require('../db/models/Walk');
 const WalkRequestDog = require('../db/models/WalkRequestDog');
 const Dog = require('../db/models/Dog');
 const WalkRequest = require('../db/models/WalkRequest');
@@ -27,26 +26,6 @@ module.exports = (db) => {
       })
   });
 
-  //-----------------------------------------------------------------------------------------
-
-  router.get("/walks", (req, res) => {
-
-    Walk.findAll({
-        include: Dog
-      })
-      .then((walks) => {
-
-        res.json(walks);
-      })
-      .catch((err) => {
-        res
-          .status(500)
-          .json({
-            error: err.message
-          });
-        console.log('Query Error.....');
-      })
-  });
 
   //---------------------------------------------------------------------------------
   //---Twilio ----
