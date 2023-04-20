@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const {Op} = require("sequelize");
-const {isAdmin} = require("../../middleware/authenticate");
+const {Sequelize} = require("sequelize");
+const { isAdmin } = require("../../middleware/authenticate");
+const moment = require('moment');
+moment().format();
 //-----------------------------------------------------------------------------------------
 //----- Models ------
 const Walk = require('../../db/models/Walk');
@@ -68,7 +71,7 @@ module.exports = (db) => {
 
       let walk = await Walk.findOrCreate({
         where: {
-          date: walkRequest.date
+          date: moment(walkRequest.date).startOf('day').toDate(), // use moment to compare dates and convert to Date object
         },
         include: Dog
       });
@@ -92,7 +95,7 @@ module.exports = (db) => {
     } else {
         const walk = await Walk.findOne({
         where: {
-          date: walkRequest.date
+          date: moment(walkRequest.date).startOf('day').toDate(), // use moment to compare dates and convert to Date object
         }
       })
 

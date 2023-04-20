@@ -9,7 +9,8 @@ const WalkDog = require('./WalkDog');
 const Walk = db.define('walks', {
   date: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW
+    defaultValue: DataTypes.NOW,
+
   },
 });
 //-------------------------------------------------------------------------------------------------
