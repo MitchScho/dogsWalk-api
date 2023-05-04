@@ -23,9 +23,7 @@ module.exports = (db) => {
   router.get("/admin/walks-requests", isAdmin, (req, res) => {
 
     WalkRequest.findAll({
-        where:{
-              isAccepted: null
-            },
+      
         include: Dog
       })
       .then((walkRequests) => {
@@ -74,88 +72,10 @@ module.exports = (db) => {
 
   router.put("/admin/walks-requests/:id", isAdmin, async (req, res) => {
 
-    //  const id = req.params.id;
-    //  const payload = req.body;
-
-    //  const walkRequest = await WalkRequest.findByPk(id, {
-    //    include: Dog,
-    //  });
-
-    //  const isAccepted =
-    //    payload.isAccepted !== undefined ?
-    //    payload.isAccepted :
-    //    walkRequest.isAccepted;
-    //  const payedFor =
-    //    payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
-
-    //  walkRequest.isAccepted = isAccepted;
-    //  walkRequest.payedFor = payedFor;
-
-    //  await walkRequest.save();
-
-    //  const approved = walkRequest.isAccepted && payload.isAccepted;
-
-    //  if (approved) {
-    //    // Find or create a walk with the given date
-    //    const [walk, created] = await Walk.findOrCreate({
-    //      where: {
-    //        date: moment(walkRequest.date).startOf("day").toDate(), // moment to compare dates and convert to Date object
-    //      },
-    //    });
-
-    //    // Include the associated dogs
-    //    const dogs = await Dog.findAll({
-    //      where: {
-    //        id: walkRequest.dogs.map((dog) => dog.id)
-    //      },
-    //    });
-
-    //    // Add the dogs to the walk using the join table
-    //    await walk.addDogs(dogs);
-
-    //    // Send a confirmation message
-    //    const userPhone = "+12502539813"; //updatedWalk.user.phoneNumber;
-    //    const userDog = walkRequest.dogs[0].name;
-
-    //    client.messages
-    //      .create({
-    //        body: `Kelsey has accepted your dog walk request for ${userDog}.`,
-    //        from: "+13087734330",
-    //        to: userPhone,
-    //      })
-    //      .then((message) => console.log(message.sid));
-    //  } else {
-    //    // Remove the dogs from the walk using the join table
-    //    const walk = await Walk.findOne({
-    //      where: {
-    //        date: moment(walkRequest.date).startOf("day").toDate(), // moment to compare dates and convert to Date object
-    //      },
-    //    });
-
-    //    await Promise.all(
-    //      walkRequest.dogs.map((dog) =>
-    //        WalkDog.destroy({
-    //          where: {
-    //            walkId: walk.id,
-    //            dogId: dog.id,
-    //          },
-    //        })
-    //      )
-    //    );
-
-    //    // Count the number of dogs associated with the walk
-    //    const dogCount = await walk.countDogs();
-
-    //    // Delete the walk if the dog count is zero
-    //    if (dogCount === 0) {
-    //      await walk.destroy();
-    //    }
-    //  }
-
-    //  return res.json(walkRequest);
-
     const id = req.params.id;
     const payload = req.body;
+
+    console.log('payload ==>', payload);
 
     const walkRequest = await WalkRequest.findByPk(id, {
       include: Dog
@@ -165,7 +85,10 @@ module.exports = (db) => {
     const payedFor = payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
 
     walkRequest.isAccepted = isAccepted
-    walkRequest.payedFor = payedFor;
+
+    if (isAccepted) {
+      walkRequest.payedFor = payedFor;
+      }
 
     await walkRequest.save();
 
@@ -183,7 +106,7 @@ module.exports = (db) => {
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
         walkId: walk[0].dataValues.id,
         dogId: dog.id
-      })))
+      })));
 
       // const userPhone = '+12502539813' //updatedWalk.user.phoneNumber;
       // const userDog = walk.dogs[0].name;
@@ -203,12 +126,17 @@ module.exports = (db) => {
         }
       })
 
+      if (!walk) {
+        return res.json({message: 'No Walk Found'})
+      }
+
+      console.log('walk id', walk.id);
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.destroy({
         where: {
           walkId: walk.id,
           dogId: dog.id
         }
-      })))
+      })));     
 
       // Count the number of dogs associated with the walk
       const dogCount = await walk.countDogs();
@@ -228,6 +156,7 @@ module.exports = (db) => {
   router.get("/admin/walks-requests/:id", isAdmin, (req, res) => {
 
     const id = req.params.id;
+    // console.log('end point id', id);
 
     WalkRequest.findByPk(id, {
         include: Dog
@@ -247,3 +176,83 @@ module.exports = (db) => {
 
   return router;
 };
+
+  //  const id = req.params.id;
+  //  const payload = req.body;
+
+  //  const walkRequest = await WalkRequest.findByPk(id, {
+  //    include: Dog,
+  //  });
+
+  //  const isAccepted =
+  //    payload.isAccepted !== undefined ?
+  //    payload.isAccepted :
+  //    walkRequest.isAccepted;
+  //  const payedFor =
+  //    payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
+
+  //  walkRequest.isAccepted = isAccepted;
+  //  walkRequest.payedFor = payedFor;
+
+  //  await walkRequest.save();
+
+  //  const approved = walkRequest.isAccepted && payload.isAccepted;
+
+  //  if (approved) {
+  //    // Find or create a walk with the given date
+  //    const [walk, created] = await Walk.findOrCreate({
+  //      where: {
+  //        date: moment(walkRequest.date).startOf("day").toDate(), // moment to compare dates and convert to Date object
+  //      },
+  //    });
+
+  //    // Include the associated dogs
+  //    const dogs = await Dog.findAll({
+  //      where: {
+  //        id: walkRequest.dogs.map((dog) => dog.id)
+  //      },
+  //    });
+
+  //    // Add the dogs to the walk using the join table
+  //    await walk.addDogs(dogs);
+
+  //    // Send a confirmation message
+  //    const userPhone = "+12502539813"; //updatedWalk.user.phoneNumber;
+  //    const userDog = walkRequest.dogs[0].name;
+
+  //    client.messages
+  //      .create({
+  //        body: `Kelsey has accepted your dog walk request for ${userDog}.`,
+  //        from: "+13087734330",
+  //        to: userPhone,
+  //      })
+  //      .then((message) => console.log(message.sid));
+  //  } else {
+  //    // Remove the dogs from the walk using the join table
+  //    const walk = await Walk.findOne({
+  //      where: {
+  //        date: moment(walkRequest.date).startOf("day").toDate(), // moment to compare dates and convert to Date object
+  //      },
+  //    });
+
+  //    await Promise.all(
+  //      walkRequest.dogs.map((dog) =>
+  //        WalkDog.destroy({
+  //          where: {
+  //            walkId: walk.id,
+  //            dogId: dog.id,
+  //          },
+  //        })
+  //      )
+  //    );
+
+  //    // Count the number of dogs associated with the walk
+  //    const dogCount = await walk.countDogs();
+
+  //    // Delete the walk if the dog count is zero
+  //    if (dogCount === 0) {
+  //      await walk.destroy();
+  //    }
+  //  }
+
+  //  return res.json(walkRequest);

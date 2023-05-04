@@ -34,24 +34,30 @@ module.exports = (db) => {
 
   router.get("/walks-dogs/:id", async(req, res) => {
 
-    console.log("id ===>>", req.params.id);
+    // console.log("id ===>>", req.params.id);
 
     const walkRequest = await WalkRequest.findByPk(req.params.id)
 
-    console.log("walk request date", walkRequest.dataValues.date);
+    // console.log("walk request date", walkRequest.dataValues.date);
 
     const walkRequestDate = new Date(walkRequest.dataValues.date)
 
-    const walks = await Walk.findAll({
+    const walk = await Walk.findOne({
       where: {
-        date: {
-          [Op.between]: [walkRequestDate, new Date(walkRequestDate.getTime() + 24 * 60 * 60 * 1000)],
-        }
-
-      },
-      include: Dog
+        date: walkRequestDate
+      }
     })
-  return res.json(walks)
+    // const walks = await Walk.findAll({
+    //   where: {
+    //     date: {
+    //       [Op.between]: [walkRequestDate, new Date(walkRequestDate.getTime() + 24 * 60 * 60 * 1000)],
+    //     }
+
+    //   },
+    //   include: Dog
+    // })
+    // console.log('walk with dogs', walk);
+  return res.json(walk)
   });
 
   return router;
