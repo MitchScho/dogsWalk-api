@@ -84,11 +84,14 @@ module.exports = (db) => {
     const isAccepted = payload.isAccepted !== undefined ? payload.isAccepted : walkRequest.isAccepted;
     const payedFor = payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
 
-    walkRequest.isAccepted = isAccepted
+    if (!isAccepted && payedFor) {
+      return res.status(400).json({
+        error: 'Walk request must be accepted for payment to occur!'
+      });
+    }
 
-    if (isAccepted) {
-      walkRequest.payedFor = payedFor;
-      }
+    walkRequest.isAccepted = isAccepted
+    walkRequest.payedFor = payedFor;
 
     await walkRequest.save();
 
@@ -124,13 +127,8 @@ module.exports = (db) => {
         where: {
           date: moment(walkRequest.date).startOf('day').toDate(), // moment to compare dates and convert to Date object
         }
-      })
+      });
 
-      if (!walk) {
-        return res.json({message: 'No Walk Found'})
-      }
-
-      console.log('walk id', walk.id);
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.destroy({
         where: {
           walkId: walk.id,
@@ -149,14 +147,12 @@ module.exports = (db) => {
 
     return res.json(walkRequest);
 
-
   });
 
 
   router.get("/admin/walks-requests/:id", isAdmin, (req, res) => {
 
     const id = req.params.id;
-    // console.log('end point id', id);
 
     WalkRequest.findByPk(id, {
         include: Dog
@@ -174,85 +170,17 @@ module.exports = (db) => {
       })
   });
 
+  router.delete("/admin/walks-requests", isAdmin, async (req, res) => {
+  
+    await WalkRequest.destroy({
+      where: {
+              isAccepted: true,
+              payedFor: true
+        },
+        include: Dog
+    })
+    res.send('Requests Deleted')
+  })
+
   return router;
 };
-
-  //  const id = req.params.id;
-  //  const payload = req.body;
-
-  //  const walkRequest = await WalkRequest.findByPk(id, {
-  //    include: Dog,
-  //  });
-
-  //  const isAccepted =
-  //    payload.isAccepted !== undefined ?
-  //    payload.isAccepted :
-  //    walkRequest.isAccepted;
-  //  const payedFor =
-  //    payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
-
-  //  walkRequest.isAccepted = isAccepted;
-  //  walkRequest.payedFor = payedFor;
-
-  //  await walkRequest.save();
-
-  //  const approved = walkRequest.isAccepted && payload.isAccepted;
-
-  //  if (approved) {
-  //    // Find or create a walk with the given date
-  //    const [walk, created] = await Walk.findOrCreate({
-  //      where: {
-  //        date: moment(walkRequest.date).startOf("day").toDate(), // moment to compare dates and convert to Date object
-  //      },
-  //    });
-
-  //    // Include the associated dogs
-  //    const dogs = await Dog.findAll({
-  //      where: {
-  //        id: walkRequest.dogs.map((dog) => dog.id)
-  //      },
-  //    });
-
-  //    // Add the dogs to the walk using the join table
-  //    await walk.addDogs(dogs);
-
-  //    // Send a confirmation message
-  //    const userPhone = "+12502539813"; //updatedWalk.user.phoneNumber;
-  //    const userDog = walkRequest.dogs[0].name;
-
-  //    client.messages
-  //      .create({
-  //        body: `Kelsey has accepted your dog walk request for ${userDog}.`,
-  //        from: "+13087734330",
-  //        to: userPhone,
-  //      })
-  //      .then((message) => console.log(message.sid));
-  //  } else {
-  //    // Remove the dogs from the walk using the join table
-  //    const walk = await Walk.findOne({
-  //      where: {
-  //        date: moment(walkRequest.date).startOf("day").toDate(), // moment to compare dates and convert to Date object
-  //      },
-  //    });
-
-  //    await Promise.all(
-  //      walkRequest.dogs.map((dog) =>
-  //        WalkDog.destroy({
-  //          where: {
-  //            walkId: walk.id,
-  //            dogId: dog.id,
-  //          },
-  //        })
-  //      )
-  //    );
-
-  //    // Count the number of dogs associated with the walk
-  //    const dogCount = await walk.countDogs();
-
-  //    // Delete the walk if the dog count is zero
-  //    if (dogCount === 0) {
-  //      await walk.destroy();
-  //    }
-  //  }
-
-  //  return res.json(walkRequest);
