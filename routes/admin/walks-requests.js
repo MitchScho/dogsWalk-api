@@ -23,7 +23,7 @@ module.exports = (db) => {
   router.get("/admin/walks-requests", isAdmin, (req, res) => {
 
     WalkRequest.findAll({
-      
+
         include: Dog
       })
       .then((walkRequests) => {
@@ -83,8 +83,11 @@ module.exports = (db) => {
 
     const isAccepted = payload.isAccepted !== undefined ? payload.isAccepted : walkRequest.isAccepted;
     const payedFor = payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
-
+    console.log('is accepted', isAccepted);
+    console.log('is paid for', payedFor);
     if (!isAccepted && payedFor) {
+      walkRequest.payedFor = false;
+      await walkRequest.save();
       return res.status(400).json({
         error: 'Walk request must be accepted for payment to occur!'
       });
@@ -129,12 +132,14 @@ module.exports = (db) => {
         }
       });
 
+      console.log('walk for delete', walk);
+
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.destroy({
         where: {
           walkId: walk.id,
           dogId: dog.id
         }
-      })));     
+      })));
 
       // Count the number of dogs associated with the walk
       const dogCount = await walk.countDogs();
@@ -171,7 +176,7 @@ module.exports = (db) => {
   });
 
   router.delete("/admin/walks-requests", isAdmin, async (req, res) => {
-  
+
     await WalkRequest.destroy({
       where: {
               isAccepted: true,
