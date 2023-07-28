@@ -75,7 +75,7 @@ module.exports = (db) => {
     const id = req.params.id;
     const payload = req.body;
 
-    console.log('payload ==>', payload);
+    // console.log('payload ==>', payload);
 
     const walkRequest = await WalkRequest.findByPk(id, {
       include: Dog
@@ -83,8 +83,10 @@ module.exports = (db) => {
 
     const isAccepted = payload.isAccepted !== undefined ? payload.isAccepted : walkRequest.isAccepted;
     const payedFor = payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
-    console.log('is accepted', isAccepted);
-    console.log('is paid for', payedFor);
+
+    // console.log('is accepted', isAccepted);
+    // console.log('is paid for', payedFor);
+
     if (!isAccepted && payedFor) {
       walkRequest.payedFor = false;
       await walkRequest.save();
@@ -132,7 +134,7 @@ module.exports = (db) => {
         }
       });
 
-      console.log('walk for delete', walk);
+      // console.log('walk for delete', walk);
 
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.destroy({
         where: {

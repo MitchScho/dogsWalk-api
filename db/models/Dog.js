@@ -8,6 +8,9 @@ const db = require('..');
 //------ Dog Model Defined -----------------------------------------------------------
 
 const Dog = db.define('dogs', {
+  userId: {
+    type: DataTypes.INTEGER,
+  },
   name: {
     type: DataTypes.STRING
   },
@@ -18,6 +21,6 @@ const Dog = db.define('dogs', {
 
 //------------------------------------------------------------------------------------
 //------ Associations ------------------------------------------------------------------------------
-Dog.belongsTo(User);
+Dog.belongsTo(User, {foreignKey: 'userId'});
 
 module.exports = Dog;
