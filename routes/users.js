@@ -34,24 +34,43 @@ module.exports = (db) => {
   router.get("/users/:id/dogs", authenticateToken, (req, res) => {
 
     const userId = req.params.id;
-    console.log('userId', userId);
+
     User.findByPk(userId)
       .then((user) => {
         if (!user) {
           return res.json({message:'No User Found!'})
         }
-        console.log("userid", user.id);
+
         Dog.findAll({
           where: {
             userId: user.id
           }
         })
           .then((dogs) => {
-            console.log(dogs);
+
           res.json(dogs)
         })
-    })
+      })
+    .catch(err => {
+      res
+        .status(500)
+        .json({
+          error: err.message
+        });
+    });
   });
+
+  router.post("/users/:id/dogs", authenticateToken, (req, res) => {
+    const userId = req.params.id;
+    const dogName = req.body.name;
+
+    const dog = Dog.create({
+      userId: userId,
+      name: dogName
+    })
+
+    res.json(dog);
+  })
 
   return router;
 };
