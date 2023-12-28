@@ -70,7 +70,7 @@ module.exports = (db) => {
     })
 
     res.json(dog);
-  })
+  });
 
   return router;
 };

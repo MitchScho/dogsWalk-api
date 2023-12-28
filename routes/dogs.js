@@ -1,6 +1,9 @@
 
 const router = require("express").Router();
 const Dog = require('../db/models/Dog')
+const {
+  authenticateToken
+} = require('../middleware/authenticate');
 
 module.exports = (db) => {
   router.get("/dogs", (req, res) => {
@@ -16,7 +19,15 @@ module.exports = (db) => {
       });
   });
 
+  router.delete("/dogs/:id", authenticateToken, async (req, res) => {
 
+    const dog = await Dog.findByPk(req.params.id)
+      await dog.destroy();
+    res.json();
+  });
+
+
+  //--- Test Route ---
   router.get("/test", (req, res) => {
     console.log("Hi Test");
     Dog.findAll()
@@ -25,6 +36,7 @@ module.exports = (db) => {
         res.json({ message: "Hi i'm a Test" })
       });
   });
+
 
 
 
