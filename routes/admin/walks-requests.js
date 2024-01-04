@@ -46,7 +46,7 @@ module.exports = (db) => {
 
     WalkRequest.findAll({
         where: {
-          payedFor: null
+          paidFor: null
         },
         include: Dog
       })
@@ -82,13 +82,13 @@ module.exports = (db) => {
     });
 
     const isAccepted = payload.isAccepted !== undefined ? payload.isAccepted : walkRequest.isAccepted;
-    const payedFor = payload.payedFor !== undefined ? payload.payedFor : walkRequest.payedFor;
+    const paidFor = payload.paidFor !== undefined ? payload.paidFor : walkRequest.paidFor;
 
     // console.log('is accepted', isAccepted);
-    // console.log('is paid for', payedFor);
+    // console.log('is paid for', paidFor);
 
-    if (!isAccepted && payedFor) {
-      walkRequest.payedFor = false;
+    if (!isAccepted && paidFor) {
+      walkRequest.paidFor = false;
       await walkRequest.save();
       return res.status(400).json({
         error: 'Walk request must be accepted for payment to occur!'
@@ -96,7 +96,7 @@ module.exports = (db) => {
     }
 
     walkRequest.isAccepted = isAccepted
-    walkRequest.payedFor = payedFor;
+    walkRequest.paidFor = paidFor;
 
     await walkRequest.save();
 
@@ -182,7 +182,7 @@ module.exports = (db) => {
     await WalkRequest.destroy({
       where: {
               isAccepted: true,
-              payedFor: true
+              paidFor: true
         },
         include: Dog
     })

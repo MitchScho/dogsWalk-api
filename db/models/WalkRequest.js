@@ -14,7 +14,7 @@ const WalkRequest = db.define('walk_request', {
   userId: {
     type: DataTypes.INTEGER,
   },
-  payedFor: {
+  paidFor: {
     type: DataTypes.BOOLEAN
   },
   isAccepted: {
