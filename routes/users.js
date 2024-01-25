@@ -9,21 +9,15 @@ module.exports = (db) => {
 
   router.get("/users/:id", (req, res) => {
 
-    WalkRequest.findByPk(req.params.id, {
-      include: Dog
-    })
-      .then((walkRequest) => {
-
         User.findOne({
           where: {
-            id: walkRequest.userId
+            id: req.params.id,
           }
         })
         .then((user) => {
 
           res.json(user);
         })
-    })
       .catch(err => {
         res
           .status(500)
