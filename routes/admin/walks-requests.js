@@ -46,7 +46,7 @@ module.exports = (db) => {
 
     WalkRequest.findAll({
         where: {
-        paidFor: null,
+        // paidFor: false,
         isAccepted: true,
         },
         include: Dog

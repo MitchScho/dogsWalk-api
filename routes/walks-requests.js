@@ -41,7 +41,9 @@ module.exports = (db) => {
 
     WalkRequest.create({
       date: date,
-      userId: user.id
+      userId: user.id,
+      paidFor: false,
+      isAccepted: false
       })
       .then((walkRequest) => {
 
