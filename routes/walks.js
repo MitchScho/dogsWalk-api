@@ -2,10 +2,9 @@ const router = require("express").Router();
 const {
   Op
 } = require("sequelize");
- //--------------------------------------------------------------------------------------
-  const Walk = require('../db/models/Walk');
-  const Dog = require('../db/models/Dog');
-const WalkRequest = require("../db/models/WalkRequest");
+ // --- Models ---
+const Walk = require('../db/models/Walk');
+const Dog = require('../db/models/Dog');
 //-----------------------------------------------------------------------------------------
 
 module.exports = (db) => {

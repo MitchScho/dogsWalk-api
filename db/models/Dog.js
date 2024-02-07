@@ -1,11 +1,9 @@
 const { DataTypes } = require('sequelize');
 const User = require('./User');
-
 const db = require('..');
-// const Walk = require('./Walk');
 //-----------------------------------------------------------------------------------
 
-//------ Dog Model Defined -----------------------------------------------------------
+//--- Dog Model Defined ---
 
 const Dog = db.define('dogs', {
   userId: {
@@ -20,7 +18,7 @@ const Dog = db.define('dogs', {
 });
 
 //------------------------------------------------------------------------------------
-//------ Associations ------------------------------------------------------------------------------
+//--- Associations ---
 Dog.belongsTo(User, {foreignKey: 'userId'});
 
 module.exports = Dog;

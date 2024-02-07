@@ -4,7 +4,7 @@ const User = require('./User');
 const Dog = require('./Dog');
 const WalkRequestDog = require('./WalkRequestDog');
 //--------------------------------------------------------------------------------------------------
-//------ WalkDog Model Defined ----------------------------------------------------------------------------
+//--- WalkDog Model Defined ---
 
 const WalkRequest = db.define('walk_request', {
   date: {

@@ -1,9 +1,8 @@
 
 const router = require("express").Router();
+const {authenticateToken} = require('../middleware/authenticate');
+// --- Models ---
 const Dog = require('../db/models/Dog')
-const {
-  authenticateToken
-} = require('../middleware/authenticate');
 
 module.exports = (db) => {
   router.get("/dogs", (req, res) => {

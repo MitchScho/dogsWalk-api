@@ -5,7 +5,6 @@ const PORT = process.env.SERVER_PORT || 8080;
 const express = require("express");
 const morgan = require("morgan");
 const db = require("./db");
-// const models = require('./db/models')
 const bodyParser = require("body-parser");
 const cors = require("cors");
 

@@ -1,5 +1,4 @@
 const router = require("express").Router();
-//-----------------------------------------------------------------------------------------
 //----- Models ------
 const WalkRequestDog = require('../db/models/WalkRequestDog');
 const Dog = require('../db/models/Dog');

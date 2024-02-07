@@ -46,7 +46,7 @@ module.exports = (db) => {
 
     WalkRequest.findAll({
         where: {
-        // paidFor: false,
+        paidFor: false,
         isAccepted: true,
         },
         include: Dog
@@ -135,7 +135,6 @@ module.exports = (db) => {
         }
       });
 
-      // console.log('walk for delete', walk);
 
       await Promise.all(walkRequest.dogs.map(dog => WalkDog.destroy({
         where: {

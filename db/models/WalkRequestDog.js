@@ -4,7 +4,7 @@ const {
 const db = require('..');
 
 //--------------------------------------------------------------------------------------------------
-//------ WalkRequestDog Model Defined ----------------------------------------------------------------------------
+//--- WalkRequestDog Model Defined ---
 
 const WalkRequestDog = db.define('walks_requests_dogs', {
   walkRequestId: {

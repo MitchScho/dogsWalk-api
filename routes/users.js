@@ -1,7 +1,7 @@
-const User = require("../db/models/User");
-const WalkRequest = require("../db/models/WalkRequest");
-const Dog = require("../db/models/Dog")
 const { authenticateToken } = require('../middleware/authenticate');
+// --- Models ---
+const Dog = require("../db/models/Dog")
+const User = require("../db/models/User");
 
 const router = require("express").Router();
 
