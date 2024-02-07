@@ -16,6 +16,8 @@ const Walk = require('../../db/models/Walk');
 const Dog = require('../../db/models/Dog');
 const WalkRequest = require('../../db/models/WalkRequest');
 const WalkDog = require("../../db/models/WalkDog");
+const WalkRequestDog = require("../../db/models/WalkRequestDog");
+const { json } = require("body-parser");
 //-------------------------------------------------------------------------------------------
 
 module.exports = (db) => {
@@ -38,6 +40,53 @@ module.exports = (db) => {
           });
         console.log('Query Error.....');
       })
+  });
+
+  //-------------------------------------------------------------------------------------------------------------
+  router.get("/admin/walks-requests/dogs/:id", isAdmin, (req, res) => {
+    console.log('walk request dog id', req.params.id);
+    WalkRequest.findAll({
+      include: [{
+        model: Dog,
+        where: {id: req.params.id}
+      }],
+       where: {paidFor: false}
+    }).then((walkRequest) => {
+      if (walkRequest) {
+        console.log("DOG FOUND: ", walkRequest)
+        res.json(walkRequest)
+      }
+      else {
+        console.log("DOG NOT FOUND")
+      }
+    })
+
+    // WalkRequestDog.findAll({
+    //   where: {
+    //     dogId: req.params.id,
+    //   },
+    //   raw: true
+    //   })
+    //   .then((walkRequestIds) => {
+    //     var walkRequestData = walkRequestIds.map(item=>item.walkRequestId)
+    //     console.log('walkRequestIds', walkRequestData);
+    //     WalkRequest.findAll({
+    //       where: {
+    //         walkRequestId: walkRequestData
+    //       }
+    //     }).then((data) => {
+    //        res.json(data);
+
+    //     })
+    //   })
+    //   .catch((err) => {
+    //     res
+    //       .status(500)
+    //       .json({
+    //         error: err.message
+    //       });
+    //     console.log('Query Error.....');
+    //   })
   });
 
   //-------------------------------------------------------------------------------------------------------------
@@ -103,6 +152,7 @@ module.exports = (db) => {
 
     const approved = walkRequest.isAccepted && payload.isAccepted;
 
+    console.log("ISAPPROVED FLAG: ", approved, walkRequest.isAccepted, req.body)
     if (approved) {
 
       let walk = await Walk.findOrCreate({
@@ -112,9 +162,11 @@ module.exports = (db) => {
         include: Dog
       });
 
-      await Promise.all(walkRequest.dogs.map(dog => WalkDog.create({
-        walkId: walk[0].dataValues.id,
-        dogId: dog.id
+      await Promise.all(walkRequest.dogs.map(dog => WalkDog.findOrCreate({
+        where: {
+          walkId: walk[0].dataValues.id,
+            dogId: dog.id
+        }
       })));
 
       // const userPhone = '+12502539813' //updatedWalk.user.phoneNumber;

@@ -31,7 +31,7 @@ module.exports = (db) => {
     console.log("Hi Test");
     Dog.findAll()
       .then((dogs) => {
-        console.log(dogs)
+        //console.log(dogs)
         res.json({ message: "Hi i'm a Test" })
       });
   });
