@@ -125,17 +125,12 @@ module.exports = (db) => {
     const id = req.params.id;
     const payload = req.body;
 
-    // console.log('payload ==>', payload);
-
     const walkRequest = await WalkRequest.findByPk(id, {
       include: Dog
     });
 
     const isAccepted = payload.isAccepted !== undefined ? payload.isAccepted : walkRequest.isAccepted;
     const paidFor = payload.paidFor !== undefined ? payload.paidFor : walkRequest.paidFor;
-
-    // console.log('is accepted', isAccepted);
-    // console.log('is paid for', paidFor);
 
     if (!isAccepted && paidFor) {
       walkRequest.paidFor = false;
@@ -152,7 +147,7 @@ module.exports = (db) => {
 
     const approved = walkRequest.isAccepted && payload.isAccepted;
 
-    console.log("ISAPPROVED FLAG: ", approved, walkRequest.isAccepted, req.body)
+    // console.log("ISAPPROVED FLAG: ", approved, walkRequest.isAccepted, req.body)
     if (approved) {
 
       let walk = await Walk.findOrCreate({

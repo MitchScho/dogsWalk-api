@@ -12,8 +12,10 @@ const Dog = db.define('dogs', {
   name: {
     type: DataTypes.STRING
   },
-  avatar: {
-    type: DataTypes.STRING
+  image: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: null,
   },
 });
 
