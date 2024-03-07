@@ -75,11 +75,7 @@ module.exports = (db) => {
       })
 
   });
-
-//   router.get("/walks", authenticationToken, (req, res) => {
-//   res.json
-// })
-
+  //------------------------------------------------------------------------------
 
   router.delete("/walks-requests/:id", (req, res) => {
 

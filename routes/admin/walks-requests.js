@@ -1,11 +1,5 @@
 const router = require("express").Router();
 const {
-  Op
-} = require("sequelize");
-const {
-  Sequelize
-} = require("sequelize");
-const {
   isAdmin
 } = require("../../middleware/authenticate");
 const moment = require('moment');
@@ -44,7 +38,7 @@ module.exports = (db) => {
 
   //-------------------------------------------------------------------------------------------------------------
   router.get("/admin/walks-requests/dogs/:id", isAdmin, (req, res) => {
-    console.log('walk request dog id', req.params.id);
+
     WalkRequest.findAll({
       include: [{
         model: Dog,
@@ -60,33 +54,6 @@ module.exports = (db) => {
         console.log("DOG NOT FOUND")
       }
     })
-
-    // WalkRequestDog.findAll({
-    //   where: {
-    //     dogId: req.params.id,
-    //   },
-    //   raw: true
-    //   })
-    //   .then((walkRequestIds) => {
-    //     var walkRequestData = walkRequestIds.map(item=>item.walkRequestId)
-    //     console.log('walkRequestIds', walkRequestData);
-    //     WalkRequest.findAll({
-    //       where: {
-    //         walkRequestId: walkRequestData
-    //       }
-    //     }).then((data) => {
-    //        res.json(data);
-
-    //     })
-    //   })
-    //   .catch((err) => {
-    //     res
-    //       .status(500)
-    //       .json({
-    //         error: err.message
-    //       });
-    //     console.log('Query Error.....');
-    //   })
   });
 
   //-------------------------------------------------------------------------------------------------------------
@@ -115,10 +82,11 @@ module.exports = (db) => {
   });
 
   //---------------------------------------------------------------------------------
+
   //---Twilio ----
   const client = require('twilio')("ACaca7aaf27930135c91101895427a47a1", "d822ce3d49fe76de018fdd9f16e97c24");
 
-
+ //------------------------------------------------------------------------------
 
   router.put("/admin/walks-requests/:id", isAdmin, async (req, res) => {
 
@@ -203,6 +171,7 @@ module.exports = (db) => {
 
   });
 
+  //------------------------------------------------------------------------------
 
   router.get("/admin/walks-requests/:id", isAdmin, (req, res) => {
 
@@ -223,6 +192,8 @@ module.exports = (db) => {
         console.log('Query Error.....');
       })
   });
+
+  //------------------------------------------------------------------------------
 
   router.delete("/admin/walks-requests", isAdmin, async (req, res) => {
 

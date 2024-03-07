@@ -14,8 +14,7 @@ const Dog = db.define('dogs', {
   },
   image: {
     type: DataTypes.STRING,
-    allowNull: true,
-    defaultValue: null,
+    defaultValue: 'https://firebasestorage.googleapis.com/v0/b/walkdogs-5bd5e.appspot.com/o/dog.thumbnail.png?alt=media&token=5365f699-4ea4-4617-aacd-53c8b84e473e'
   },
 });
 
