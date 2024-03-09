@@ -23,8 +23,10 @@ module.exports = (db) => {
 
     const image = req.body.image;
     const name = req.body.name;
+    const address = req.body.address;
+
     const dog = await Dog.findByPk(req.params.id);
-    await dog.update({image, name});
+    await dog.update({image, name, address});
     await dog.save();
 
     res.json(dog);

@@ -10,7 +10,10 @@ const Dog = db.define('dogs', {
     type: DataTypes.INTEGER,
   },
   name: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+  },
+  address: {
+    type: DataTypes.STRING,
   },
   image: {
     type: DataTypes.STRING,
