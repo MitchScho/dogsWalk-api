@@ -13,6 +13,7 @@ const cors = require("cors");
 const app = express();
 
 //----------------------------------------------------------------------------------------------------
+console.log("DB_PASSWORD type:", typeof process.env.DB_PASSWORD);
 
 //------ Test Sequelize connection -------
 
@@ -23,6 +24,10 @@ db.authenticate()
   .catch((err) => {
     console.log(err.message);
   })
+
+//------ Initialize Model Associations -------
+// This must be done after models are loaded but before routes are used
+require('./db/associations');
 
 //----------------------------  MiddleWare  ------------------------------------------------------------------------
 

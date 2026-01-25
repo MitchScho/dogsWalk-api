@@ -9,7 +9,10 @@ const Walk = db.define('walks', {
   date: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
-
+  },
+  paidFor: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   },
 });
 //-------------------------------------------------------------------------------------------------

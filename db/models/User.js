@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const db = require('..');
-const Dog = require('./Dog');
 //--------------------------------------------------------------------------------------------------
 
 //--- User Model Defined ---
@@ -19,15 +18,18 @@ const User = db.define('users', {
 
   },
   role: {
-    type: DataTypes.STRING,
-    defaultValue: "client",
+    type: DataTypes.ENUM("admin", "client"),
+    allowNull: false,
+    defaultValue: "client"
   },
 })
 
 //------------------------------------------------------------------------------------------------------
 
 //--- Associations ----
-// User.hasMany(Dog);
+// Note: User.hasMany(Dog) relationship is established via Dog.belongsTo(User) in Dog.js
+// Sequelize should handle the inverse relationship automatically
+// If explicit hasMany is needed, it can be defined in a separate associations file
 
 
 module.exports = User;
