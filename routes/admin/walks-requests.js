@@ -500,5 +500,162 @@ module.exports = (db) => {
     }
   });
 
+  //------------------------------------------------------------------------------
+  // Remove a dog from a walk
+  router.delete("/admin/walks/:walkId/dogs/:dogId", isAdmin, async (req, res) => {
+    try {
+      const { walkId, dogId } = req.params;
+
+      // Find the walk
+      const walk = await Walk.findByPk(walkId, {
+        include: [Dog]
+      });
+
+      if (!walk) {
+        return res.status(404).json({
+          error: 'Walk not found'
+        });
+      }
+
+      // Remove the dog from the walk
+      await WalkDog.destroy({
+        where: {
+          walkId: parseInt(walkId),
+          dogId: parseInt(dogId)
+        }
+      });
+
+      // Set paidFor to false when removing a dog (removes need for payment)
+      walk.paidFor = false;
+      await walk.save();
+
+      res.json({ success: true, message: 'Dog removed from walk' });
+    } catch (err) {
+      res.status(500).json({
+        error: err.message
+      });
+      console.log('Query Error in DELETE /admin/walks/:walkId/dogs/:dogId:', err);
+    }
+  });
+
+  //------------------------------------------------------------------------------
+  // Add a dog to a walk (creates walk request, accepts it, and adds to walk)
+  router.post("/admin/walks/:walkId/dogs", isAdmin, async (req, res) => {
+    try {
+      const { walkId } = req.params;
+      const { dogId, date } = req.body;
+
+      console.log('POST /admin/walks/:walkId/dogs - Request body:', req.body);
+      console.log('POST /admin/walks/:walkId/dogs - walkId:', walkId);
+      console.log('POST /admin/walks/:walkId/dogs - dogId:', dogId, 'type:', typeof dogId);
+
+      if (dogId === undefined || dogId === null || dogId === '') {
+        return res.status(400).json({
+          error: 'dogId is required'
+        });
+      }
+
+      // Find or create the walk
+      let walk;
+      if (walkId === 'new') {
+        if (!date) {
+          return res.status(400).json({
+            error: 'date is required when creating a new walk'
+          });
+        }
+        // Create a new walk for the specified date
+        const walkDate = moment(date).startOf('day').toDate();
+        const [walkInstance] = await Walk.findOrCreate({
+          where: {
+            date: walkDate,
+          },
+          defaults: {
+            paidFor: false,
+            date: walkDate,
+          }
+        });
+        walk = walkInstance;
+      } else {
+        // Find existing walk
+        const parsedWalkId = parseInt(walkId, 10);
+        if (isNaN(parsedWalkId)) {
+          return res.status(400).json({
+            error: 'Invalid walkId'
+          });
+        }
+        walk = await Walk.findByPk(parsedWalkId, {
+          include: [Dog]
+        });
+
+        if (!walk) {
+          return res.status(404).json({
+            error: 'Walk not found'
+          });
+        }
+      }
+
+      // Check if dog exists
+      const dog = await Dog.findByPk(dogId);
+      if (!dog) {
+        return res.status(404).json({
+          error: 'Dog not found'
+        });
+      }
+
+      // Check if dog is already in the walk
+      const existingWalkDog = await WalkDog.findOne({
+        where: {
+          walkId: walk.id,
+          dogId: parseInt(dogId)
+        }
+      });
+
+      if (existingWalkDog) {
+        console.log('Dog already in walk - walkId:', walk.id, 'dogId:', dogId);
+        return res.status(400).json({
+          error: 'Dog is already in this walk'
+        });
+      }
+
+      // Get the dog's user
+      const dogUser = await User.findByPk(dog.userId);
+      if (!dogUser) {
+        return res.status(404).json({
+          error: 'Dog owner not found'
+        });
+      }
+
+      // Create a walk request for this dog on this date
+      const walkRequest = await WalkRequest.create({
+        date: walk.date,
+        userId: dogUser.id,
+        isAccepted: true, // Auto-accept since admin is adding
+        paidFor: false // Don't mark as paid yet
+      });
+
+      // Add dog to walk request
+      await WalkRequestDog.create({
+        walkRequestId: walkRequest.id,
+        dogId: parseInt(dogId)
+      });
+
+      // Add dog to the walk
+      await WalkDog.create({
+        walkId: walk.id,
+        dogId: parseInt(dogId)
+      });
+
+      res.json({ success: true, message: 'Dog added to walk', walkRequest, walk });
+    } catch (err) {
+      console.error('Query Error in POST /admin/walks/:walkId/dogs:', err);
+      console.error('Error message:', err.message);
+      console.error('Error stack:', err.stack);
+      res.status(500).json({
+        error: err.message || 'Internal server error',
+        details: process.env.NODE_ENV === 'development' ? err.stack : undefined
+      });
+    }
+  });
+
   return router;
 };
